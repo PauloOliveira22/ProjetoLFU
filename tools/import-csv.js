@@ -19,7 +19,7 @@ const POS = {
   'Meia': 'MEI', 'Ponta': 'PON', 'Atacante': 'ATA'
 };
 
-const MIN_SQUAD = 16; // descarta elencos com poucos dados
+const MIN_SQUAD = 11; // mantem todo elenco com pelo menos um time titular
 
 // Clubes da Serie A (liga e representacao) - separado dos elencos do draft.
 const CLUBS = [

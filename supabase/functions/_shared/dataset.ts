@@ -46,6 +46,37 @@ export const SQUADS: Squad[] = [
     { name: 'Jadílson', pos: 'ATA', rating: 63 },
     { name: 'Ricardinho', pos: 'ATA', rating: 62 }
   ] },
+  { club: 'Clube Atlético Mineiro', year: 2003, players: [
+    { name: 'Cicinho', pos: 'LAT', rating: 67 },
+    { name: 'Michel', pos: 'LAT', rating: 61 },
+    { name: 'Rafael Scheidt', pos: 'ZAG', rating: 65 },
+    { name: 'André Luiz', pos: 'ZAG', rating: 65 },
+    { name: 'Neguete', pos: 'ZAG', rating: 54 },
+    { name: 'Marcelo Silva', pos: 'VOL', rating: 65 },
+    { name: 'Márcio Araújo', pos: 'VOL', rating: 57 },
+    { name: 'Lúcio Flávio', pos: 'MEI', rating: 69 },
+    { name: 'Juninho Arcanjo', pos: 'MEI', rating: 64 },
+    { name: 'Enrico', pos: 'MEI', rating: 60 },
+    { name: 'Lenílson', pos: 'MEI', rating: 55 },
+    { name: 'Paulinho', pos: 'ATA', rating: 69 },
+    { name: 'Quirino', pos: 'ATA', rating: 60 },
+    { name: 'Enílton', pos: 'ATA', rating: 55 }
+  ] },
+  { club: 'Clube de Regatas Vasco da Gama', year: 2003, players: [
+    { name: 'Fábio', pos: 'GK', rating: 71 },
+    { name: 'Edinho', pos: 'LAT', rating: 58 },
+    { name: 'Gérson', pos: 'LAT', rating: 54 },
+    { name: 'Wescley', pos: 'ZAG', rating: 66 },
+    { name: 'Wellington Monteiro', pos: 'VOL', rating: 61 },
+    { name: 'Ygor', pos: 'VOL', rating: 60 },
+    { name: 'Coutinho', pos: 'VOL', rating: 56 },
+    { name: 'Carlos Alberto', pos: 'VOL', rating: 55 },
+    { name: 'Morais', pos: 'MEI', rating: 66 },
+    { name: 'Cadu', pos: 'MEI', rating: 65 },
+    { name: 'Edmundo', pos: 'ATA', rating: 71 },
+    { name: 'Souza', pos: 'ATA', rating: 65 },
+    { name: 'Anderson Costa', pos: 'ATA', rating: 63 }
+  ] },
   { club: 'Coritiba Foot Ball Club', year: 2003, players: [
     { name: 'Fernando Prass', pos: 'GK', rating: 70 },
     { name: 'Fernando Vizzotto', pos: 'GK', rating: 55 },
@@ -109,6 +140,23 @@ export const SQUADS: Squad[] = [
     { name: 'João Paulo', pos: 'ATA', rating: 62 },
     { name: 'Léo', pos: 'ATA', rating: 55 }
   ] },
+  { club: 'Esporte Clube Vitória', year: 2003, players: [
+    { name: 'Juninho', pos: 'GK', rating: 66 },
+    { name: 'Paulo Musse', pos: 'GK', rating: 60 },
+    { name: 'Felipe', pos: 'GK', rating: 54 },
+    { name: 'Alex Santos', pos: 'LAT', rating: 57 },
+    { name: 'Dudu Paraíba', pos: 'LAT', rating: 54 },
+    { name: 'Marcos', pos: 'ZAG', rating: 61 },
+    { name: 'Nené', pos: 'ZAG', rating: 59 },
+    { name: 'Felipe Saad', pos: 'ZAG', rating: 54 },
+    { name: 'Dudu Cearense', pos: 'MEI', rating: 68 },
+    { name: 'Maurício', pos: 'MEI', rating: 61 },
+    { name: 'Leandro Domingues', pos: 'PON', rating: 57 },
+    { name: 'Alecsandro', pos: 'ATA', rating: 71 },
+    { name: 'Gilmar', pos: 'ATA', rating: 62 },
+    { name: 'Enílton', pos: 'ATA', rating: 57 },
+    { name: 'César Santin', pos: 'ATA', rating: 55 }
+  ] },
   { club: 'Figueirense Futebol Clube', year: 2003, players: [
     { name: 'Édson Bastos', pos: 'GK', rating: 71 },
     { name: 'Triguinho', pos: 'LAT', rating: 64 },
@@ -128,6 +176,19 @@ export const SQUADS: Squad[] = [
     { name: 'Sandro Hiroshi', pos: 'ATA', rating: 61 },
     { name: 'Roberto', pos: 'ATA', rating: 56 }
   ] },
+  { club: 'Fluminense Football Club', year: 2003, players: [
+    { name: 'Fernando Henrique', pos: 'GK', rating: 60 },
+    { name: 'Jancarlos', pos: 'LAT', rating: 63 },
+    { name: 'Johnathan', pos: 'LAT', rating: 56 },
+    { name: 'Antônio Carlos', pos: 'ZAG', rating: 55 },
+    { name: 'Marcão', pos: 'VOL', rating: 67 },
+    { name: 'Carlos Alberto', pos: 'MEI', rating: 68 },
+    { name: 'Lopes', pos: 'MEI', rating: 66 },
+    { name: 'Marcelo Macedo', pos: 'ATA', rating: 67 },
+    { name: 'Josafá', pos: 'ATA', rating: 60 },
+    { name: 'Rodrigo Tiuí', pos: 'ATA', rating: 56 },
+    { name: 'Diego Souza', pos: 'ATA', rating: 56 }
+  ] },
   { club: 'Santos FC', year: 2003, players: [
     { name: 'Fábio Costa', pos: 'GK', rating: 67 },
     { name: 'Júlio Sérgio', pos: 'GK', rating: 58 },
@@ -146,6 +207,22 @@ export const SQUADS: Squad[] = [
     { name: 'William', pos: 'ATA', rating: 74 },
     { name: 'Ricardo Oliveira', pos: 'ATA', rating: 67 },
     { name: 'Marcelo Peabiru', pos: 'ATA', rating: 56 }
+  ] },
+  { club: 'São Paulo Futebol Clube', year: 2003, players: [
+    { name: 'Fabiano', pos: 'LAT', rating: 69 },
+    { name: 'Gustavo Nery', pos: 'LAT', rating: 67 },
+    { name: 'Fábio Santos', pos: 'LAT', rating: 58 },
+    { name: 'Jorginho Paulista', pos: 'LAT', rating: 56 },
+    { name: 'Diego Lugano', pos: 'ZAG', rating: 63 },
+    { name: 'Edcarlos', pos: 'ZAG', rating: 56 },
+    { name: 'Régis', pos: 'ZAG', rating: 55 },
+    { name: 'Carlos Alberto', pos: 'VOL', rating: 65 },
+    { name: 'Kaká', pos: 'MEI', rating: 73 },
+    { name: 'Júlio Baptista', pos: 'MEI', rating: 65 },
+    { name: 'Ricardinho', pos: 'MEI', rating: 64 },
+    { name: 'Luís Fabiano', pos: 'ATA', rating: 84 },
+    { name: 'Diego Tardelli', pos: 'ATA', rating: 73 },
+    { name: 'Kléber', pos: 'ATA', rating: 66 }
   ] },
   { club: 'Sport Club Corinthians Paulista', year: 2003, players: [
     { name: 'Doni', pos: 'GK', rating: 65 },
@@ -195,6 +272,21 @@ export const SQUADS: Squad[] = [
     { name: 'Nilmar', pos: 'ATA', rating: 73 },
     { name: 'Fábio Júnior', pos: 'ATA', rating: 56 },
     { name: 'Leandro Tatu', pos: 'ATA', rating: 54 }
+  ] },
+  { club: 'AD São Caetano (SP)', year: 2004, players: [
+    { name: 'Anderson Lima', pos: 'LAT', rating: 68 },
+    { name: 'Triguinho', pos: 'LAT', rating: 65 },
+    { name: 'Ceará', pos: 'LAT', rating: 63 },
+    { name: 'Gilberto', pos: 'LAT', rating: 56 },
+    { name: 'Jonas', pos: 'LAT', rating: 56 },
+    { name: 'Dininho', pos: 'ZAG', rating: 64 },
+    { name: 'Marcelo Mattos', pos: 'VOL', rating: 67 },
+    { name: 'Marcinho', pos: 'MEI', rating: 70 },
+    { name: 'Lúcio Flávio', pos: 'MEI', rating: 64 },
+    { name: 'Mateus Borges', pos: 'MEI', rating: 62 },
+    { name: 'Danilo Cruz', pos: 'MEI', rating: 56 },
+    { name: 'Fábio Baiano', pos: 'PON', rating: 62 },
+    { name: 'Euller', pos: 'ATA', rating: 67 }
   ] },
   { club: 'Atlético Paranaense', year: 2004, players: [
     { name: 'Diego', pos: 'GK', rating: 71 },
@@ -263,6 +355,21 @@ export const SQUADS: Squad[] = [
     { name: 'André Neles', pos: 'ATA', rating: 54 },
     { name: 'Rafael Moura', pos: 'ATA', rating: 54 }
   ] },
+  { club: 'Clube de Regatas Vasco da Gama', year: 2004, players: [
+    { name: 'Cássio', pos: 'GK', rating: 63 },
+    { name: 'Fábio', pos: 'GK', rating: 62 },
+    { name: 'Wescley', pos: 'ZAG', rating: 58 },
+    { name: 'Pereira', pos: 'ZAG', rating: 55 },
+    { name: 'Ygor', pos: 'VOL', rating: 67 },
+    { name: 'Coutinho', pos: 'VOL', rating: 66 },
+    { name: 'Silva', pos: 'VOL', rating: 56 },
+    { name: 'Dejan Petkovic', pos: 'MEI', rating: 81 },
+    { name: 'Cadu', pos: 'MEI', rating: 60 },
+    { name: 'Muriqui', pos: 'PON', rating: 64 },
+    { name: 'Anderson Costa', pos: 'ATA', rating: 72 },
+    { name: 'Marco Brito', pos: 'ATA', rating: 68 },
+    { name: 'André Lima', pos: 'ATA', rating: 61 }
+  ] },
   { club: 'Coritiba Foot Ball Club', year: 2004, players: [
     { name: 'Fernando Prass', pos: 'GK', rating: 70 },
     { name: 'Douglas', pos: 'GK', rating: 60 },
@@ -287,6 +394,33 @@ export const SQUADS: Squad[] = [
     { name: 'Víctor Aristizábal', pos: 'ATA', rating: 69 },
     { name: 'Laércio', pos: 'ATA', rating: 63 },
     { name: 'André Nunes', pos: 'ATA', rating: 57 }
+  ] },
+  { club: 'CR Flamengo', year: 2004, players: [
+    { name: 'Júlio César', pos: 'GK', rating: 72 },
+    { name: 'Diego', pos: 'GK', rating: 63 },
+    { name: 'Athirson', pos: 'LAT', rating: 64 },
+    { name: 'China', pos: 'LAT', rating: 61 },
+    { name: 'Valdomiro', pos: 'ZAG', rating: 56 },
+    { name: 'Douglas Silva', pos: 'VOL', rating: 60 },
+    { name: 'Rafael Ledesma', pos: 'MEI', rating: 68 },
+    { name: 'Roger Guerreiro', pos: 'MEI', rating: 67 },
+    { name: 'Jônatas', pos: 'MEI', rating: 62 },
+    { name: 'Vinícius Pacheco', pos: 'MEI', rating: 55 },
+    { name: 'Dill', pos: 'PON', rating: 56 },
+    { name: 'Negreiros', pos: 'ATA', rating: 67 }
+  ] },
+  { club: 'Criciúma Esporte Clube', year: 2004, players: [
+    { name: 'Roberto Volpato', pos: 'GK', rating: 58 },
+    { name: 'Fernando Leal', pos: 'GK', rating: 55 },
+    { name: 'Fernandinho', pos: 'LAT', rating: 63 },
+    { name: 'Jeci', pos: 'ZAG', rating: 55 },
+    { name: 'Douglas', pos: 'MEI', rating: 63 },
+    { name: 'Paulo César', pos: 'MEI', rating: 62 },
+    { name: 'Marcio Richardes', pos: 'MEI', rating: 58 },
+    { name: 'Marcos Denner', pos: 'ATA', rating: 76 },
+    { name: 'Paulinho', pos: 'ATA', rating: 60 },
+    { name: 'Fabrício Ceará', pos: 'ATA', rating: 57 },
+    { name: 'Éder', pos: 'ATA', rating: 54 }
   ] },
   { club: 'Cruzeiro Esporte Clube', year: 2004, players: [
     { name: 'Artur Moraes', pos: 'GK', rating: 68 },
@@ -343,6 +477,66 @@ export const SQUADS: Squad[] = [
     { name: 'Leonardo', pos: 'ATA', rating: 56 },
     { name: 'Hulk', pos: 'ATA', rating: 55 }
   ] },
+  { club: 'Figueirense Futebol Clube', year: 2004, players: [
+    { name: 'Édson Bastos', pos: 'GK', rating: 70 },
+    { name: 'Filipe Luís', pos: 'LAT', rating: 59 },
+    { name: 'Márcio Martins', pos: 'ZAG', rating: 58 },
+    { name: 'William de Mattia', pos: 'VOL', rating: 54 },
+    { name: 'Sérgio Manoel', pos: 'MEI', rating: 71 },
+    { name: 'Bilú', pos: 'MEI', rating: 65 },
+    { name: 'Carlos Alberto', pos: 'MEI', rating: 63 },
+    { name: 'Alexandre Gaucho', pos: 'PON', rating: 60 },
+    { name: 'Marlon', pos: 'ATA', rating: 68 },
+    { name: 'André Neles', pos: 'ATA', rating: 62 },
+    { name: 'Rodrigo Silva', pos: 'ATA', rating: 62 }
+  ] },
+  { club: 'Fluminense Football Club', year: 2004, players: [
+    { name: 'Fernando Henrique', pos: 'GK', rating: 70 },
+    { name: 'Antônio Carlos', pos: 'ZAG', rating: 67 },
+    { name: 'Odvan', pos: 'ZAG', rating: 64 },
+    { name: 'Filipe Machado', pos: 'ZAG', rating: 54 },
+    { name: 'Marcão', pos: 'VOL', rating: 61 },
+    { name: 'Arouca', pos: 'VOL', rating: 57 },
+    { name: 'Ramon Menezes', pos: 'MEI', rating: 73 },
+    { name: 'Roger Flores', pos: 'MEI', rating: 70 },
+    { name: 'Juliano Mineiro', pos: 'MEI', rating: 54 },
+    { name: 'Edmundo', pos: 'ATA', rating: 71 },
+    { name: 'Rodrigo Tiuí', pos: 'ATA', rating: 68 },
+    { name: 'Marcelo Macedo', pos: 'ATA', rating: 67 },
+    { name: 'Diego Souza', pos: 'ATA', rating: 66 }
+  ] },
+  { club: 'Grêmio Foot-Ball Porto Alegrense', year: 2004, players: [
+    { name: 'Galatto', pos: 'GK', rating: 54 },
+    { name: 'George Lucas', pos: 'LAT', rating: 63 },
+    { name: 'Capone', pos: 'LAT', rating: 56 },
+    { name: 'Felipe Baloy', pos: 'ZAG', rating: 65 },
+    { name: 'Fábio Bilica', pos: 'ZAG', rating: 62 },
+    { name: 'Cocito', pos: 'VOL', rating: 64 },
+    { name: 'Felipe Melo', pos: 'VOL', rating: 62 },
+    { name: 'Luciano Santos', pos: 'VOL', rating: 59 },
+    { name: 'Emerson', pos: 'VOL', rating: 57 },
+    { name: 'Douglas Silva', pos: 'VOL', rating: 56 },
+    { name: 'Anderson', pos: 'MEI', rating: 60 },
+    { name: 'Bruno', pos: 'MEI', rating: 55 },
+    { name: 'Michel Bastos', pos: 'PON', rating: 65 },
+    { name: 'Cláudio Pitbull', pos: 'ATA', rating: 81 },
+    { name: 'Marciano', pos: 'ATA', rating: 54 }
+  ] },
+  { club: 'Guarani Futebol Clube (SP)', year: 2004, players: [
+    { name: 'Patrick', pos: 'LAT', rating: 64 },
+    { name: 'Mariano', pos: 'LAT', rating: 55 },
+    { name: 'João Leonardo', pos: 'ZAG', rating: 61 },
+    { name: 'Paulo André', pos: 'ZAG', rating: 58 },
+    { name: 'Tiago', pos: 'ZAG', rating: 55 },
+    { name: 'Serginho', pos: 'VOL', rating: 56 },
+    { name: 'Netinho', pos: 'MEI', rating: 62 },
+    { name: 'Caio', pos: 'MEI', rating: 56 },
+    { name: 'Harison', pos: 'PON', rating: 65 },
+    { name: 'Sandro Hiroshi', pos: 'ATA', rating: 69 },
+    { name: 'Valdir Papel', pos: 'ATA', rating: 66 },
+    { name: 'Willian Bigode', pos: 'ATA', rating: 56 },
+    { name: 'Léo', pos: 'ATA', rating: 55 }
+  ] },
   { club: 'Paraná Clube', year: 2004, players: [
     { name: 'Flávio', pos: 'GK', rating: 70 },
     { name: 'Edinho', pos: 'LAT', rating: 64 },
@@ -383,6 +577,21 @@ export const SQUADS: Squad[] = [
     { name: 'Paulo César', pos: 'PON', rating: 69 },
     { name: 'William', pos: 'ATA', rating: 66 },
     { name: 'Leandro Machado', pos: 'ATA', rating: 55 }
+  ] },
+  { club: 'São Paulo Futebol Clube', year: 2004, players: [
+    { name: 'Cicinho', pos: 'LAT', rating: 73 },
+    { name: 'Fábio Santos', pos: 'LAT', rating: 63 },
+    { name: 'Gustavo Nery', pos: 'LAT', rating: 63 },
+    { name: 'Diego Lugano', pos: 'ZAG', rating: 68 },
+    { name: 'Fabão', pos: 'ZAG', rating: 67 },
+    { name: 'Edcarlos', pos: 'ZAG', rating: 57 },
+    { name: 'Alê', pos: 'VOL', rating: 63 },
+    { name: 'Renan Teixeira', pos: 'VOL', rating: 63 },
+    { name: 'Danilo', pos: 'MEI', rating: 73 },
+    { name: 'Marquinhos', pos: 'MEI', rating: 64 },
+    { name: 'Nildo', pos: 'MEI', rating: 62 },
+    { name: 'Luís Fabiano', pos: 'ATA', rating: 75 },
+    { name: 'Diego Tardelli', pos: 'ATA', rating: 70 }
   ] },
   { club: 'Sociedade Esportiva Palmeiras', year: 2004, players: [
     { name: 'Sérgio', pos: 'GK', rating: 69 },
@@ -456,6 +665,22 @@ export const SQUADS: Squad[] = [
     { name: 'Nilmar', pos: 'ATA', rating: 71 },
     { name: 'Rafael Sóbis', pos: 'ATA', rating: 70 },
     { name: 'Didi', pos: 'ATA', rating: 55 }
+  ] },
+  { club: 'AD São Caetano (SP)', year: 2005, players: [
+    { name: 'Triguinho', pos: 'LAT', rating: 68 },
+    { name: 'Alessandro', pos: 'LAT', rating: 65 },
+    { name: 'Douglas', pos: 'ZAG', rating: 64 },
+    { name: 'Emerson', pos: 'ZAG', rating: 55 },
+    { name: 'Claudecir', pos: 'VOL', rating: 66 },
+    { name: 'Júlio César', pos: 'VOL', rating: 63 },
+    { name: 'Germano', pos: 'VOL', rating: 55 },
+    { name: 'Marcinho', pos: 'MEI', rating: 70 },
+    { name: 'Marcio Richardes', pos: 'MEI', rating: 70 },
+    { name: 'Lúcio Flávio', pos: 'MEI', rating: 57 },
+    { name: 'Mateus Borges', pos: 'MEI', rating: 55 },
+    { name: 'Edu Sales', pos: 'ATA', rating: 65 },
+    { name: 'Márcio Mixirica', pos: 'ATA', rating: 63 },
+    { name: 'Élton', pos: 'ATA', rating: 55 }
   ] },
   { club: 'Atlético Paranaense', year: 2005, players: [
     { name: 'Diego', pos: 'GK', rating: 65 },
@@ -571,6 +796,38 @@ export const SQUADS: Squad[] = [
     { name: 'Marcelo Peabiru', pos: 'ATA', rating: 63 },
     { name: 'Marciano', pos: 'ATA', rating: 59 }
   ] },
+  { club: 'CR Flamengo', year: 2005, players: [
+    { name: 'Diego', pos: 'GK', rating: 72 },
+    { name: 'China', pos: 'LAT', rating: 56 },
+    { name: 'Augusto Recife', pos: 'VOL', rating: 61 },
+    { name: 'Renato Abreu', pos: 'MEI', rating: 76 },
+    { name: 'Jônatas', pos: 'MEI', rating: 66 },
+    { name: 'Fellype Gabriel', pos: 'MEI', rating: 66 },
+    { name: 'Vinícius Pacheco', pos: 'MEI', rating: 62 },
+    { name: 'Caio', pos: 'MEI', rating: 55 },
+    { name: 'Renato Augusto', pos: 'MEI', rating: 55 },
+    { name: 'Diego Souza', pos: 'ATA', rating: 68 },
+    { name: 'Josafá', pos: 'ATA', rating: 63 },
+    { name: 'Fábio Júnior', pos: 'ATA', rating: 56 },
+    { name: 'Bruno Mezenga', pos: 'ATA', rating: 56 }
+  ] },
+  { club: 'Cruzeiro Esporte Clube', year: 2005, players: [
+    { name: 'Fábio', pos: 'GK', rating: 70 },
+    { name: 'Artur Moraes', pos: 'GK', rating: 59 },
+    { name: 'Patrick', pos: 'LAT', rating: 60 },
+    { name: 'Jonathan', pos: 'LAT', rating: 60 },
+    { name: 'Athirson', pos: 'LAT', rating: 58 },
+    { name: 'Marcelo Batatais', pos: 'ZAG', rating: 65 },
+    { name: 'Gladstone', pos: 'ZAG', rating: 59 },
+    { name: 'Argel Fuchs', pos: 'ZAG', rating: 57 },
+    { name: 'Marabá', pos: 'VOL', rating: 61 },
+    { name: 'Adriano Gabirú', pos: 'MEI', rating: 74 },
+    { name: 'Lopes', pos: 'MEI', rating: 60 },
+    { name: 'Ruy Cabeção', pos: 'MEI', rating: 55 },
+    { name: 'Alecsandro', pos: 'ATA', rating: 78 },
+    { name: 'Fred', pos: 'ATA', rating: 76 },
+    { name: 'Tadeu', pos: 'ATA', rating: 55 }
+  ] },
   { club: 'Esporte Clube Juventude', year: 2005, players: [
     { name: 'Doni', pos: 'GK', rating: 64 },
     { name: 'Edu Silva', pos: 'LAT', rating: 62 },
@@ -611,6 +868,54 @@ export const SQUADS: Squad[] = [
     { name: 'Thiago Silvy', pos: 'ATA', rating: 56 },
     { name: 'Cléo', pos: 'ATA', rating: 55 },
     { name: 'Edno', pos: 'ATA', rating: 55 }
+  ] },
+  { club: 'Fluminense Football Club', year: 2005, players: [
+    { name: 'Marcelo', pos: 'LAT', rating: 54 },
+    { name: 'Igor', pos: 'ZAG', rating: 67 },
+    { name: 'Milton do Ó', pos: 'ZAG', rating: 60 },
+    { name: 'Antônio Carlos', pos: 'ZAG', rating: 58 },
+    { name: 'Arouca', pos: 'VOL', rating: 66 },
+    { name: 'Marcão', pos: 'VOL', rating: 65 },
+    { name: 'Radamés', pos: 'VOL', rating: 59 },
+    { name: 'Dejan Petkovic', pos: 'MEI', rating: 76 },
+    { name: 'Juninho Arcanjo', pos: 'MEI', rating: 63 },
+    { name: 'Juliano Mineiro', pos: 'MEI', rating: 55 },
+    { name: 'Tuta', pos: 'ATA', rating: 79 },
+    { name: 'Leandro', pos: 'ATA', rating: 68 },
+    { name: 'Rodrigo Tiuí', pos: 'ATA', rating: 67 },
+    { name: 'Diego Souza', pos: 'ATA', rating: 55 }
+  ] },
+  { club: 'Fortaleza Esporte Clube', year: 2005, players: [
+    { name: 'Albérico', pos: 'GK', rating: 60 },
+    { name: 'Amaral', pos: 'LAT', rating: 64 },
+    { name: 'Marquinhos Caruaru', pos: 'LAT', rating: 63 },
+    { name: 'Alan', pos: 'ZAG', rating: 66 },
+    { name: 'Gabriel', pos: 'ZAG', rating: 55 },
+    { name: 'Nivaldo', pos: 'ZAG', rating: 54 },
+    { name: 'Erandir', pos: 'VOL', rating: 67 },
+    { name: 'Lúcio', pos: 'MEI', rating: 71 },
+    { name: 'Fumagalli', pos: 'MEI', rating: 71 },
+    { name: 'Igor Cearense', pos: 'MEI', rating: 63 },
+    { name: 'Danilo Cruz', pos: 'MEI', rating: 55 },
+    { name: 'Alex Afonso', pos: 'ATA', rating: 67 },
+    { name: 'Marcos Denner', pos: 'ATA', rating: 62 },
+    { name: 'Ari', pos: 'ATA', rating: 55 },
+    { name: 'André Neles', pos: 'ATA', rating: 54 }
+  ] },
+  { club: 'Goiás EC', year: 2005, players: [
+    { name: 'Harlei', pos: 'GK', rating: 72 },
+    { name: 'Vítor', pos: 'LAT', rating: 59 },
+    { name: 'André Dias', pos: 'ZAG', rating: 66 },
+    { name: 'Rogerio Correa', pos: 'ZAG', rating: 59 },
+    { name: 'Marcelo Silva', pos: 'VOL', rating: 57 },
+    { name: 'Rodrigo Tabata', pos: 'MEI', rating: 74 },
+    { name: 'Paulo Baier', pos: 'MEI', rating: 71 },
+    { name: 'Tiago Fraga', pos: 'MEI', rating: 58 },
+    { name: 'Válber', pos: 'MEI', rating: 55 },
+    { name: 'Souza', pos: 'ATA', rating: 81 },
+    { name: 'Roni', pos: 'ATA', rating: 72 },
+    { name: 'Dodô', pos: 'ATA', rating: 67 },
+    { name: 'Michel Neves', pos: 'ATA', rating: 54 }
   ] },
   { club: 'Paraná Clube', year: 2005, players: [
     { name: 'Flávio', pos: 'GK', rating: 71 },
@@ -748,6 +1053,21 @@ export const SQUADS: Squad[] = [
     { name: 'Iarley', pos: 'ATA', rating: 68 },
     { name: 'Gustavo Papa', pos: 'ATA', rating: 65 }
   ] },
+  { club: 'AD São Caetano (SP)', year: 2006, players: [
+    { name: 'Anderson Lima', pos: 'LAT', rating: 67 },
+    { name: 'Triguinho', pos: 'LAT', rating: 62 },
+    { name: 'Alessandro', pos: 'LAT', rating: 59 },
+    { name: 'Jonas', pos: 'LAT', rating: 59 },
+    { name: 'Maurício Ramos', pos: 'ZAG', rating: 56 },
+    { name: 'Marabá', pos: 'VOL', rating: 65 },
+    { name: 'Rafael Muçamba', pos: 'VOL', rating: 62 },
+    { name: 'Élton', pos: 'MEI', rating: 66 },
+    { name: 'Dinélson', pos: 'MEI', rating: 58 },
+    { name: 'Fernando Gabriel', pos: 'MEI', rating: 54 },
+    { name: 'Gustavo Papa', pos: 'ATA', rating: 66 },
+    { name: 'Diego Tardelli', pos: 'ATA', rating: 61 },
+    { name: 'Igor Castro', pos: 'ATA', rating: 57 }
+  ] },
   { club: 'Associação Atlética Ponte Preta', year: 2006, players: [
     { name: 'Aranha', pos: 'GK', rating: 60 },
     { name: 'Nei', pos: 'LAT', rating: 64 },
@@ -811,6 +1131,40 @@ export const SQUADS: Squad[] = [
     { name: 'Dodô', pos: 'ATA', rating: 78 },
     { name: 'Lima', pos: 'ATA', rating: 68 }
   ] },
+  { club: 'Clube de Regatas Vasco da Gama', year: 2006, players: [
+    { name: 'Cássio', pos: 'GK', rating: 71 },
+    { name: 'Roberto Volpato', pos: 'GK', rating: 55 },
+    { name: 'Jorge Luiz', pos: 'ZAG', rating: 63 },
+    { name: 'Emiliano Dudar', pos: 'ZAG', rating: 57 },
+    { name: 'Andrade', pos: 'VOL', rating: 68 },
+    { name: 'Ygor', pos: 'VOL', rating: 68 },
+    { name: 'Amaral', pos: 'VOL', rating: 60 },
+    { name: 'Alberoni', pos: 'VOL', rating: 59 },
+    { name: 'Coutinho', pos: 'VOL', rating: 58 },
+    { name: 'Morais', pos: 'MEI', rating: 72 },
+    { name: 'Ramon Menezes', pos: 'MEI', rating: 71 },
+    { name: 'Fábio Júnior', pos: 'ATA', rating: 64 },
+    { name: 'Bruno Meneghel', pos: 'ATA', rating: 55 },
+    { name: 'Valdir Papel', pos: 'ATA', rating: 55 },
+    { name: 'Luiz Carlos', pos: 'ATA', rating: 54 }
+  ] },
+  { club: 'CR Flamengo', year: 2006, players: [
+    { name: 'Diego', pos: 'GK', rating: 66 },
+    { name: 'Egídio', pos: 'LAT', rating: 54 },
+    { name: 'Emerson', pos: 'ZAG', rating: 54 },
+    { name: 'Renato Abreu', pos: 'MEI', rating: 75 },
+    { name: 'Renato Augusto', pos: 'MEI', rating: 66 },
+    { name: 'Vinícius Pacheco', pos: 'MEI', rating: 64 },
+    { name: 'Jônatas', pos: 'MEI', rating: 60 },
+    { name: 'Fellype Gabriel', pos: 'MEI', rating: 56 },
+    { name: 'Sávio', pos: 'PON', rating: 60 },
+    { name: 'Horacio Peralta', pos: 'ATA', rating: 64 },
+    { name: 'Luizão', pos: 'ATA', rating: 61 },
+    { name: 'Jajá', pos: 'ATA', rating: 59 },
+    { name: 'Marcelo Macedo', pos: 'ATA', rating: 55 },
+    { name: 'Diego Souza', pos: 'ATA', rating: 54 },
+    { name: 'Bruno Mezenga', pos: 'ATA', rating: 54 }
+  ] },
   { club: 'Cruzeiro Esporte Clube', year: 2006, players: [
     { name: 'Fábio', pos: 'GK', rating: 70 },
     { name: 'Lauro', pos: 'GK', rating: 55 },
@@ -849,6 +1203,35 @@ export const SQUADS: Squad[] = [
     { name: 'Cristiano', pos: 'PON', rating: 65 },
     { name: 'Zé Rodolpho', pos: 'PON', rating: 56 },
     { name: 'Josiel', pos: 'ATA', rating: 54 }
+  ] },
+  { club: 'Figueirense Futebol Clube', year: 2006, players: [
+    { name: 'Andrey', pos: 'GK', rating: 71 },
+    { name: 'Dalton', pos: 'GK', rating: 67 },
+    { name: 'Fininho', pos: 'LAT', rating: 60 },
+    { name: 'Edson Henrique', pos: 'ZAG', rating: 60 },
+    { name: 'Paulão', pos: 'ZAG', rating: 55 },
+    { name: 'Cícero', pos: 'MEI', rating: 76 },
+    { name: 'Carlos Alberto', pos: 'MEI', rating: 67 },
+    { name: 'Diego Barcellos', pos: 'MEI', rating: 65 },
+    { name: 'Rodrigo Paulista', pos: 'MEI', rating: 57 },
+    { name: 'Schwenck', pos: 'ATA', rating: 79 },
+    { name: 'Thiago Silvy', pos: 'ATA', rating: 61 }
+  ] },
+  { club: 'Fluminense Football Club', year: 2006, players: [
+    { name: 'Fernando Henrique', pos: 'GK', rating: 64 },
+    { name: 'Diego', pos: 'GK', rating: 59 },
+    { name: 'Marcelo', pos: 'LAT', rating: 74 },
+    { name: 'Ulisses', pos: 'LAT', rating: 55 },
+    { name: 'Thiago Silva', pos: 'ZAG', rating: 70 },
+    { name: 'Marcão', pos: 'VOL', rating: 66 },
+    { name: 'Arouca', pos: 'VOL', rating: 61 },
+    { name: 'Radamés', pos: 'VOL', rating: 59 },
+    { name: 'Dejan Petkovic', pos: 'MEI', rating: 72 },
+    { name: 'Juliano Mineiro', pos: 'MEI', rating: 67 },
+    { name: 'André Moritz', pos: 'MEI', rating: 60 },
+    { name: 'Juninho Arcanjo', pos: 'MEI', rating: 56 },
+    { name: 'Tuta', pos: 'ATA', rating: 77 },
+    { name: 'Cláudio Pitbull', pos: 'ATA', rating: 69 }
   ] },
   { club: 'Fortaleza Esporte Clube', year: 2006, players: [
     { name: 'Albérico', pos: 'GK', rating: 62 },
@@ -910,6 +1293,19 @@ export const SQUADS: Squad[] = [
     { name: 'Sandro Mendonça', pos: 'ATA', rating: 72 },
     { name: 'Leonardo', pos: 'ATA', rating: 71 },
     { name: 'Joelson', pos: 'ATA', rating: 62 }
+  ] },
+  { club: 'Santa Cruz FC (PE)', year: 2006, players: [
+    { name: 'Anderson', pos: 'GK', rating: 57 },
+    { name: 'Juninho', pos: 'GK', rating: 55 },
+    { name: 'Augusto Recife', pos: 'VOL', rating: 62 },
+    { name: 'Jorge Henrique', pos: 'MEI', rating: 63 },
+    { name: 'Bruno Lança', pos: 'MEI', rating: 62 },
+    { name: 'Rosembrick', pos: 'MEI', rating: 61 },
+    { name: 'Thiago Gentil', pos: 'MEI', rating: 55 },
+    { name: 'Nenê', pos: 'ATA', rating: 74 },
+    { name: 'Márcio Mixirica', pos: 'ATA', rating: 67 },
+    { name: 'Fabrício Ceará', pos: 'ATA', rating: 61 },
+    { name: 'Paulinho', pos: 'ATA', rating: 54 }
   ] },
   { club: 'Santos FC', year: 2006, players: [
     { name: 'Fábio Costa', pos: 'GK', rating: 70 },
@@ -1204,6 +1600,50 @@ export const SQUADS: Squad[] = [
     { name: 'Luciano', pos: 'ATA', rating: 62 },
     { name: 'Michel Neves', pos: 'ATA', rating: 58 }
   ] },
+  { club: 'Figueirense Futebol Clube', year: 2007, players: [
+    { name: 'Wilson', pos: 'GK', rating: 70 },
+    { name: 'Dalton', pos: 'GK', rating: 54 },
+    { name: 'Ânderson Luís', pos: 'LAT', rating: 58 },
+    { name: 'Lucas', pos: 'LAT', rating: 54 },
+    { name: 'Edson Henrique', pos: 'ZAG', rating: 61 },
+    { name: 'Rafael Lima', pos: 'ZAG', rating: 57 },
+    { name: 'Ruy Cabeção', pos: 'MEI', rating: 69 },
+    { name: 'Cleiton Xavier', pos: 'MEI', rating: 65 },
+    { name: 'Thiago Gentil', pos: 'MEI', rating: 60 },
+    { name: 'Adriano Gabirú', pos: 'MEI', rating: 56 },
+    { name: 'Léo', pos: 'ATA', rating: 64 }
+  ] },
+  { club: 'Fluminense Football Club', year: 2007, players: [
+    { name: 'Fernando Henrique', pos: 'GK', rating: 71 },
+    { name: 'Ivan', pos: 'LAT', rating: 57 },
+    { name: 'Thiago Silva', pos: 'ZAG', rating: 71 },
+    { name: 'Sandro', pos: 'ZAG', rating: 54 },
+    { name: 'Arouca', pos: 'VOL', rating: 70 },
+    { name: 'Maurício', pos: 'VOL', rating: 65 },
+    { name: 'Thiago Neves', pos: 'MEI', rating: 82 },
+    { name: 'Cícero', pos: 'MEI', rating: 71 },
+    { name: 'Tartá', pos: 'MEI', rating: 68 },
+    { name: 'David', pos: 'MEI', rating: 66 },
+    { name: 'Carlos Alberto', pos: 'MEI', rating: 61 },
+    { name: 'André Moritz', pos: 'MEI', rating: 55 },
+    { name: 'Rodrigo Tiuí', pos: 'ATA', rating: 66 },
+    { name: 'Léo Itaperuna', pos: 'ATA', rating: 63 },
+    { name: 'Rafael Moura', pos: 'ATA', rating: 55 }
+  ] },
+  { club: 'Goiás EC', year: 2007, players: [
+    { name: 'Harlei', pos: 'GK', rating: 71 },
+    { name: 'Vítor', pos: 'LAT', rating: 66 },
+    { name: 'Chiquinho', pos: 'LAT', rating: 58 },
+    { name: 'Ernando', pos: 'ZAG', rating: 63 },
+    { name: 'Amaral', pos: 'VOL', rating: 64 },
+    { name: 'Paulo Baier', pos: 'MEI', rating: 83 },
+    { name: 'Élson', pos: 'MEI', rating: 72 },
+    { name: 'Felipe Menezes', pos: 'MEI', rating: 69 },
+    { name: 'Dejan Petkovic', pos: 'MEI', rating: 68 },
+    { name: 'Harison', pos: 'PON', rating: 63 },
+    { name: 'Welliton', pos: 'ATA', rating: 80 },
+    { name: 'Cristiano', pos: 'ATA', rating: 62 }
+  ] },
   { club: 'Grêmio Foot-Ball Porto Alegrense', year: 2007, players: [
     { name: 'Sebastián Saja', pos: 'GK', rating: 69 },
     { name: 'Galatto', pos: 'GK', rating: 55 },
@@ -1341,6 +1781,20 @@ export const SQUADS: Squad[] = [
     { name: 'Willian', pos: 'PON', rating: 75 },
     { name: 'Dentinho', pos: 'ATA', rating: 63 },
     { name: 'Wilson', pos: 'ATA', rating: 61 }
+  ] },
+  { club: 'Sport Club do Recife', year: 2007, players: [
+    { name: 'Magrão', pos: 'GK', rating: 67 },
+    { name: 'Cléber', pos: 'GK', rating: 60 },
+    { name: 'Bruno Recife', pos: 'LAT', rating: 65 },
+    { name: 'Luisinho Netto', pos: 'LAT', rating: 64 },
+    { name: 'Igor', pos: 'ZAG', rating: 63 },
+    { name: 'Adriano Gabirú', pos: 'MEI', rating: 66 },
+    { name: 'Fumagalli', pos: 'MEI', rating: 66 },
+    { name: 'Rosembrick', pos: 'MEI', rating: 62 },
+    { name: 'Da Silva', pos: 'ATA', rating: 70 },
+    { name: 'Anderson Aquino', pos: 'ATA', rating: 67 },
+    { name: 'Washington', pos: 'ATA', rating: 67 },
+    { name: 'Jadílson', pos: 'ATA', rating: 55 }
   ] },
   { club: 'Sport Club Internacional', year: 2007, players: [
     { name: 'Clemer', pos: 'GK', rating: 70 },
@@ -1685,6 +2139,22 @@ export const SQUADS: Squad[] = [
     { name: 'Igor', pos: 'ATA', rating: 55 },
     { name: 'Marcelo Macedo', pos: 'ATA', rating: 54 }
   ] },
+  { club: 'Portuguesa', year: 2008, players: [
+    { name: 'Gottardi', pos: 'GK', rating: 60 },
+    { name: 'Sérgio', pos: 'GK', rating: 58 },
+    { name: 'Athirson', pos: 'LAT', rating: 63 },
+    { name: 'Bruno Recife', pos: 'LAT', rating: 60 },
+    { name: 'Bruno Teles', pos: 'LAT', rating: 56 },
+    { name: 'Halisson', pos: 'ZAG', rating: 63 },
+    { name: 'Ediglê', pos: 'ZAG', rating: 61 },
+    { name: 'Carlos Alberto', pos: 'VOL', rating: 62 },
+    { name: 'Claudecir', pos: 'VOL', rating: 60 },
+    { name: 'Fellype Gabriel', pos: 'MEI', rating: 70 },
+    { name: 'Diego Gavilán', pos: 'MEI', rating: 62 },
+    { name: 'Jonas', pos: 'ATA', rating: 77 },
+    { name: 'Edno', pos: 'ATA', rating: 77 },
+    { name: 'Washington', pos: 'ATA', rating: 68 }
+  ] },
   { club: 'Santos FC', year: 2008, players: [
     { name: 'Douglas Jesus', pos: 'GK', rating: 66 },
     { name: 'Fábio Costa', pos: 'GK', rating: 65 },
@@ -1749,6 +2219,20 @@ export const SQUADS: Squad[] = [
     { name: 'Alex Mineiro', pos: 'PON', rating: 83 },
     { name: 'Diego Souza', pos: 'ATA', rating: 78 },
     { name: 'Kléber', pos: 'ATA', rating: 73 }
+  ] },
+  { club: 'Sport Club do Recife', year: 2008, players: [
+    { name: 'Magrão', pos: 'GK', rating: 71 },
+    { name: 'Cléber', pos: 'GK', rating: 61 },
+    { name: 'Sidny', pos: 'LAT', rating: 64 },
+    { name: 'Luisinho Netto', pos: 'LAT', rating: 60 },
+    { name: 'Igor', pos: 'ZAG', rating: 66 },
+    { name: 'Andrade', pos: 'VOL', rating: 60 },
+    { name: 'Moacir', pos: 'VOL', rating: 60 },
+    { name: 'Fumagalli', pos: 'MEI', rating: 69 },
+    { name: 'Roger Silva', pos: 'ATA', rating: 76 },
+    { name: 'Wilson', pos: 'ATA', rating: 70 },
+    { name: 'Leandro Machado', pos: 'ATA', rating: 64 },
+    { name: 'Enílton', pos: 'ATA', rating: 62 }
   ] },
   { club: 'Sport Club Internacional', year: 2008, players: [
     { name: 'Clemer', pos: 'GK', rating: 64 },
@@ -2054,6 +2538,19 @@ export const SQUADS: Squad[] = [
     { name: 'Jael', pos: 'ATA', rating: 56 },
     { name: 'Johnathan', pos: 'ATA', rating: 55 }
   ] },
+  { club: 'Grêmio Barueri Futebol Ltda.', year: 2009, players: [
+    { name: 'Márcio Careca', pos: 'LAT', rating: 71 },
+    { name: 'André Luis', pos: 'ZAG', rating: 66 },
+    { name: 'Paulão', pos: 'ZAG', rating: 54 },
+    { name: 'João Leonardo', pos: 'ZAG', rating: 54 },
+    { name: 'Diego Giaretta', pos: 'ZAG', rating: 54 },
+    { name: 'João Vitor', pos: 'VOL', rating: 65 },
+    { name: 'Bruno Ribeiro', pos: 'MEI', rating: 60 },
+    { name: 'Camilo', pos: 'MEI', rating: 55 },
+    { name: 'Flavinho', pos: 'PON', rating: 69 },
+    { name: 'Henrique Dias', pos: 'PON', rating: 60 },
+    { name: 'Willian José', pos: 'ATA', rating: 57 }
+  ] },
   { club: 'Grêmio Foot-Ball Porto Alegrense', year: 2009, players: [
     { name: 'Victor', pos: 'GK', rating: 66 },
     { name: 'Matheus Cavichioli', pos: 'GK', rating: 54 },
@@ -2103,6 +2600,23 @@ export const SQUADS: Squad[] = [
     { name: 'André Felipe', pos: 'ATA', rating: 64 },
     { name: 'Roni', pos: 'ATA', rating: 61 },
     { name: 'Tiago Luis', pos: 'ATA', rating: 55 }
+  ] },
+  { club: 'São Paulo Futebol Clube', year: 2009, players: [
+    { name: 'Diogo Silvestre', pos: 'LAT', rating: 54 },
+    { name: 'Miranda', pos: 'ZAG', rating: 72 },
+    { name: 'André Dias', pos: 'ZAG', rating: 70 },
+    { name: 'Arouca', pos: 'VOL', rating: 62 },
+    { name: 'Wellington', pos: 'VOL', rating: 56 },
+    { name: 'Hernanes', pos: 'MEI', rating: 86 },
+    { name: 'Hugo', pos: 'MEI', rating: 73 },
+    { name: 'Oscar', pos: 'MEI', rating: 65 },
+    { name: 'Sérgio Mota', pos: 'MEI', rating: 54 },
+    { name: 'Jorge Wagner', pos: 'PON', rating: 74 },
+    { name: 'Marlos', pos: 'PON', rating: 70 },
+    { name: 'Mazola', pos: 'PON', rating: 54 },
+    { name: 'Dagoberto', pos: 'ATA', rating: 72 },
+    { name: 'André Lima', pos: 'ATA', rating: 70 },
+    { name: 'Henrique Almeida', pos: 'ATA', rating: 55 }
   ] },
   { club: 'Sociedade Esportiva Palmeiras', year: 2009, players: [
     { name: 'Marcos', pos: 'GK', rating: 70 },
@@ -2440,6 +2954,22 @@ export const SQUADS: Squad[] = [
     { name: 'Schwenck', pos: 'ATA', rating: 72 },
     { name: 'Henrique Almeida', pos: 'ATA', rating: 68 }
   ] },
+  { club: 'Fluminense Football Club', year: 2010, players: [
+    { name: 'Fernando Henrique', pos: 'GK', rating: 64 },
+    { name: 'Mariano', pos: 'LAT', rating: 76 },
+    { name: 'Gum', pos: 'ZAG', rating: 69 },
+    { name: 'André Luis', pos: 'ZAG', rating: 61 },
+    { name: 'Cássio', pos: 'ZAG', rating: 55 },
+    { name: 'Edwin Valencia', pos: 'VOL', rating: 60 },
+    { name: 'Darío Conca', pos: 'MEI', rating: 84 },
+    { name: 'Tartá', pos: 'MEI', rating: 69 },
+    { name: 'Deco', pos: 'MEI', rating: 66 },
+    { name: 'Emerson', pos: 'PON', rating: 74 },
+    { name: 'Willians Santana', pos: 'PON', rating: 55 },
+    { name: 'Fred', pos: 'ATA', rating: 70 },
+    { name: 'Alan', pos: 'ATA', rating: 70 },
+    { name: 'André Lima', pos: 'ATA', rating: 55 }
+  ] },
   { club: 'Goiás EC', year: 2010, players: [
     { name: 'Harlei', pos: 'GK', rating: 65 },
     { name: 'Douglas', pos: 'LAT', rating: 66 },
@@ -2657,6 +3187,36 @@ export const SQUADS: Squad[] = [
     { name: 'Walter', pos: 'ATA', rating: 66 },
     { name: 'Edú', pos: 'ATA', rating: 62 },
     { name: 'Éverton Costa', pos: 'ATA', rating: 58 }
+  ] },
+  { club: 'América Futebol Clube (MG)', year: 2011, players: [
+    { name: 'Neneca', pos: 'GK', rating: 66 },
+    { name: 'Flávio', pos: 'GK', rating: 58 },
+    { name: 'Marcos Rocha', pos: 'LAT', rating: 71 },
+    { name: 'Gilson', pos: 'LAT', rating: 66 },
+    { name: 'Thiago Carleto', pos: 'LAT', rating: 63 },
+    { name: 'Anderson', pos: 'ZAG', rating: 62 },
+    { name: 'Amaral', pos: 'VOL', rating: 70 },
+    { name: 'Dudu Pitbull', pos: 'VOL', rating: 63 },
+    { name: 'Rodriguinho', pos: 'MEI', rating: 74 },
+    { name: 'Fabrício', pos: 'MEI', rating: 57 },
+    { name: 'Netinho', pos: 'MEI', rating: 57 },
+    { name: 'Camilo', pos: 'MEI', rating: 55 },
+    { name: 'Kempes', pos: 'ATA', rating: 78 },
+    { name: 'Léo Mineiro', pos: 'ATA', rating: 61 }
+  ] },
+  { club: 'Atlético Clube Goianiense', year: 2011, players: [
+    { name: 'Thiago Feltri', pos: 'LAT', rating: 70 },
+    { name: 'Ernandes', pos: 'LAT', rating: 64 },
+    { name: 'Adriano Lara', pos: 'LAT', rating: 60 },
+    { name: 'Gérson', pos: 'LAT', rating: 54 },
+    { name: 'Leonardo', pos: 'ZAG', rating: 60 },
+    { name: 'Rogério', pos: 'ZAG', rating: 54 },
+    { name: 'Marino', pos: 'VOL', rating: 58 },
+    { name: 'Diogo Campos', pos: 'MEI', rating: 67 },
+    { name: 'Élvis', pos: 'MEI', rating: 55 },
+    { name: 'Anselmo', pos: 'ATA', rating: 77 },
+    { name: 'Felipe', pos: 'ATA', rating: 73 },
+    { name: 'Marcão', pos: 'ATA', rating: 64 }
   ] },
   { club: 'Atlético Paranaense', year: 2011, players: [
     { name: 'Santos', pos: 'GK', rating: 54 },

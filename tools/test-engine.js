@@ -49,7 +49,7 @@ assert(E.filledByPos(dGuard).ATA === 1, 'parou exatamente em 1 atacante (4-3-3)'
 //     oferece o plantel completo para escolha.
 const dFull = E.newDraft('4-3-3');
 const firstDraw = E.drawTeamForDraft(dFull);
-assert(firstDraw.selectable.length >= 16,
+assert(firstDraw.selectable.length >= 11,
   'time sorteado oferece o plantel completo no inicio (tem ' + firstDraw.selectable.length + ')');
 
 // 1d) As 5 formacoes somam 11 e usam as 7 posicoes conhecidas.
