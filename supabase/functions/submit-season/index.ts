@@ -67,6 +67,7 @@ Deno.serve(async (req) => {
       goals_for: row?.goals_for ?? 0,
       goals_against: row?.goals_against ?? 0,
       best_finish: row?.best_finish ?? null,
+      relegations: row?.relegations ?? 0,
       formation_usage: (row?.formation_usage ?? {}) as Record<string, number>
     };
     const fu = { ...base.formation_usage };
@@ -83,6 +84,7 @@ Deno.serve(async (req) => {
       goals_for: base.goals_for + result.userStats.GF,
       goals_against: base.goals_against + result.userStats.GA,
       best_finish: base.best_finish == null ? result.finishPos : Math.min(base.best_finish, result.finishPos),
+      relegations: base.relegations + (result.isRelegated ? 1 : 0),
       formation_usage: fu,
       updated_at: new Date().toISOString()
     });

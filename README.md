@@ -13,8 +13,8 @@ viciante, no espírito dos joguinhos virais de Copa:
    posição ainda em aberto. As **notas (overall) ficam ocultas** durante o
    draft — só aparecem no resumo do time, para dificultar a escolha.
 4. Repete até completar os **11 titulares**.
-5. Com o time pronto, você disputa o **Brasileirão Série A (20 times, 19
-   rodadas)** com partidas
+5. Com o time pronto, você disputa o **Brasileirão Série A (20 times, ida e
+   volta = 38 rodadas)** com partidas
    **simuladas**: placar dinâmico ao vivo + narração em texto.
 5. Termine no topo da **tabela** e seja **campeão**.
 

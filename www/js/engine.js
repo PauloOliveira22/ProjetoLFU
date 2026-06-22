@@ -259,10 +259,17 @@
       .map(clubToTeam);
 
     const teams = [userTeam].concat(opponents);
-    const fixtures = roundRobin(teams);
+    const fixtures = doubleRoundRobin(teams);
     const table = newTable(teams.map((t) => ({ name: t.name, isUser: !!t.isUser })));
 
     return { mode: 'local', teams, fixtures, table, round: 0, results: [] };
+  }
+
+  // Ida e volta: turno + returno com mando invertido (20 times => 38 rodadas).
+  function doubleRoundRobin(teams) {
+    const ida = roundRobin(teams);
+    const volta = ida.map((round) => round.map(([home, away]) => [away, home]));
+    return ida.concat(volta);
   }
 
   function newTable(teamRefs) {

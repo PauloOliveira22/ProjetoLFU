@@ -27,10 +27,14 @@ create table if not exists public.profiles (
   goals_for int not null default 0,
   goals_against int not null default 0,
   best_finish int,
+  relegations int not null default 0,
   formation_usage jsonb not null default '{}'::jsonb,
   updated_at timestamptz not null default now(),
   created_at timestamptz not null default now()
 );
+
+-- Para projetos criados antes desta coluna existir:
+alter table public.profiles add column if not exists relegations int not null default 0;
 
 alter table public.profiles enable row level security;
 

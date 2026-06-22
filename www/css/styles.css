@@ -254,4 +254,5 @@ h2 { font-size: 1.5rem; }
 .final-stats div { flex: 1; background: rgba(255,255,255,.1); border-radius: 12px; padding: 12px; color: #fff; }
 .final-stats b { display: block; font-size: 1.5rem; color: var(--gold); }
 .final-stats span { font-size: .72rem; color: #cfe6d4; }
+.champion.relegated h2 { color: #ff7a7a; }
 .champion .btn { max-width: 320px; }

@@ -37,6 +37,7 @@
       goalsFor: 0,
       goalsAgainst: 0,
       bestFinish: null,
+      relegations: 0,
       formationUsage: {}
     };
   }
@@ -69,6 +70,7 @@
     stats.goalsFor += r.goalsFor || 0;
     stats.goalsAgainst += r.goalsAgainst || 0;
     if (r.isChampion) stats.titles += 1;
+    if (r.relegated) stats.relegations = (stats.relegations || 0) + 1;
     if (r.finishPos != null) {
       stats.bestFinish = stats.bestFinish == null ? r.finishPos : Math.min(stats.bestFinish, r.finishPos);
     }
@@ -150,6 +152,7 @@
           goalsFor: row.goals_for || 0,
           goalsAgainst: row.goals_against || 0,
           bestFinish: row.best_finish,
+          relegations: row.relegations || 0,
           formationUsage: row.formation_usage || {}
         }
       };

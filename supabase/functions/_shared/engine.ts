@@ -69,7 +69,9 @@ export interface SeasonResult {
   standings: Row[];
   champion: string;
   isChampion: boolean;
+  isRelegated: boolean;
   finishPos: number;
+  numTeams: number;
   userStats: { Pts: number; W: number; D: number; L: number; GF: number; GA: number };
   seed: number;
 }
@@ -123,17 +125,29 @@ export function simulateSeason(club: string, xi: Player[], seed: number, numClub
     else { th.D++; ta.D++; th.Pts++; ta.Pts++; }
   }
 
-  // Tabela de jogos (metodo do circulo, turno unico).
+  // Tabela de jogos pelo metodo do circulo (turno), depois ida e volta.
   const arr: (Team | null)[] = teams.slice();
   if (arr.length % 2 !== 0) arr.push(null);
   const n = arr.length;
-  const rounds: SeasonResult['rounds'] = [];
+  const ida: [Team, Team][][] = [];
   for (let rd = 0; rd < n - 1; rd++) {
-    let userMatch: SeasonResult['rounds'][number]['userMatch'] | null = null;
-    const others: { home: string; away: string; sh: number; sa: number }[] = [];
+    const round: [Team, Team][] = [];
     for (let i = 0; i < n / 2; i++) {
       const home = arr[i]; const away = arr[n - 1 - i];
-      if (!home || !away) continue;
+      if (home && away) round.push([home, away]);
+    }
+    ida.push(round);
+    arr.splice(1, 0, arr.pop()!);
+  }
+  // Returno com mando invertido (38 rodadas no total).
+  const volta = ida.map((round) => round.map(([h, a]) => [a, h] as [Team, Team]));
+  const fixtures = ida.concat(volta);
+
+  const rounds: SeasonResult['rounds'] = [];
+  for (const round of fixtures) {
+    let userMatch: SeasonResult['rounds'][number]['userMatch'] | null = null;
+    const others: { home: string; away: string; sh: number; sa: number }[] = [];
+    for (const [home, away] of round) {
       const res = simulate(home, away);
       apply(home, away, res.sa, res.sb);
       if (home.isUser || away.isUser) {
@@ -143,7 +157,6 @@ export function simulateSeason(club: string, xi: Player[], seed: number, numClub
       }
     }
     if (userMatch) rounds.push({ userMatch, others });
-    arr.splice(1, 0, arr.pop()!);
   }
 
   const standings = Object.values(table).sort((a, b) => {
@@ -154,13 +167,16 @@ export function simulateSeason(club: string, xi: Player[], seed: number, numClub
   });
 
   const finishPos = standings.findIndex((t) => t.isUser) + 1;
+  const numTeams = standings.length;
   const me = table[club];
   return {
     opponents: opponents.map((o) => ({ name: o.name, overall: o.overall })),
     rounds, standings,
     champion: standings[0].name,
     isChampion: standings[0].isUser,
+    isRelegated: finishPos >= numTeams - 3, // entre os 4 ultimos
     finishPos,
+    numTeams,
     userStats: { Pts: me.Pts, W: me.W, D: me.D, L: me.L, GF: me.GF, GA: me.GA },
     seed
   };

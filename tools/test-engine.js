@@ -71,15 +71,17 @@ let ordered = true;
 for (let i = 1; i < m.events.length; i++) if (m.events[i].minute < m.events[i - 1].minute) ordered = false;
 assert(ordered, 'eventos da partida em ordem cronologica');
 
-// 4) Temporada completa: tabela consistente (Serie A, 20 times).
+// 4) Temporada completa: tabela consistente (Serie A, 20 times, ida e volta).
 const season = E.buildSeason(team, 20);
-assert(season.fixtures.length === 19, 'turno unico de 20 times => 19 rodadas');
+assert(season.fixtures.length === 38, 'ida e volta de 20 times => 38 rodadas');
 while (!E.seasonFinished(season)) E.playRound(season);
 const tableArr = E.standings(season);
 assert(tableArr.length === 20, 'tabela com 20 times');
 const totalPts = tableArr.reduce((a, t) => a + t.Pts, 0);
 const totalJogos = tableArr.reduce((a, t) => a + t.P, 0) / 2; // cada jogo conta 2x
-assert(totalJogos === 190, '190 jogos no total (20 times, turno unico)');
+assert(totalJogos === 380, '380 jogos no total (20 times, ida e volta)');
+// Cada time joga 38 partidas (mando ida e volta).
+assert(tableArr.every((t) => t.P === 38), 'cada time joga 38 partidas');
 assert(totalPts > 0, 'pontuacao distribuida');
 tableArr.forEach((t) => {
   assert(t.P === t.W + t.D + t.L, t.name + ': jogos = V+E+D');

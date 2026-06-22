@@ -362,8 +362,10 @@
     clearLive();
     const table = E.standings(season);
     const champ = table[0];
+    const numTeams = table.length;
     const mePos = table.findIndex((t) => t.isUser) + 1;
     const won = champ.isUser;
+    const relegated = mePos >= numTeams - 3; // entre os 4 ultimos
     const me = season.table[userTeam.name];
 
     // Registro da temporada:
@@ -380,6 +382,7 @@
           club: representedClub,
           finishPos: mePos,
           isChampion: won,
+          relegated: relegated,
           wins: me.W, draws: me.D, losses: me.L,
           goalsFor: me.GF, goalsAgainst: me.GA,
           formationId: userTeam.formation.id
@@ -391,15 +394,23 @@
       }
     }
 
+    const icon = won ? '🏆' : (relegated ? '🔻' : '🎖️');
+    const title = won ? 'CAMPEÃO!' : (relegated ? 'REBAIXADO!' : 'Fim de temporada');
+    let line;
+    if (won) {
+      line = `<b>${esc(representedClub)}</b> é o grande campeão do Brasileirão Draft!`;
+    } else if (relegated) {
+      line = `Que vexame! O <b>${esc(representedClub)}</b> terminou em <b>${mePos}º</b> e
+              foi rebaixado. Campeão: <b>${esc(champ.name)}</b>.`;
+    } else {
+      line = `Campeão: <b>${esc(champ.name)}</b>. O ${esc(representedClub)} terminou em <b>${mePos}º</b>.`;
+    }
+
     render(`
-      <section class="screen champion">
-        <div class="trophy">${won ? '🏆' : '🎖️'}</div>
-        <h2>${won ? 'CAMPEÃO!' : 'Fim de temporada'}</h2>
-        <p class="champ-line">
-          ${won
-            ? `<b>${esc(representedClub)}</b> é o grande campeão do Brasileirão Draft!`
-            : `Campeão: <b>${esc(champ.name)}</b>. O ${esc(representedClub)} terminou em <b>${mePos}º</b>.`}
-        </p>
+      <section class="screen champion ${relegated && !won ? 'relegated' : ''}">
+        <div class="trophy">${icon}</div>
+        <h2>${title}</h2>
+        <p class="champ-line">${line}</p>
         <div class="final-stats">
           <div><b>${me.Pts}</b><span>Pontos</span></div>
           <div><b>${me.W}</b><span>Vitórias</span></div>
@@ -459,6 +470,7 @@
     return `
       <div class="final-stats stats-wrap">
         <div><b>${stats.titles}</b><span>Títulos</span></div>
+        <div><b>${stats.relegations || 0}</b><span>Rebaixamentos</span></div>
         <div><b>${stats.seasonsPlayed}</b><span>Temporadas</span></div>
         <div><b>${stats.bestFinish || '—'}</b><span>Melhor pos.</span></div>
         <div><b>${stats.wins}</b><span>Vitórias</span></div>
