@@ -5,7 +5,10 @@
   "private": true,
   "scripts": {
     "start": "node tools/serve.js",
-    "test": "node tools/test-engine.js",
+    "test": "node tools/test-engine.js && node tools/test-parity.js",
+    "test:engine": "node tools/test-engine.js",
+    "test:parity": "node tools/test-parity.js",
+    "supabase:deploy": "supabase functions deploy submit-season",
     "cap:add:android": "cap add android",
     "cap:sync": "cap sync",
     "cap:open:android": "cap open android"

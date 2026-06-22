@@ -94,6 +94,45 @@ O jogo tem um sistema de contas com **fallback automático**:
 > Sem internet (ou se o Supabase não carregar), o jogo cai sozinho para o
 > modo local.
 
+### 🔒 Validação server-side (anti-trapaça)
+
+No modo nuvem, **o cliente nunca grava estatísticas nem títulos** — ele só lê.
+Quem decide o resultado é uma **Edge Function** que roda no servidor:
+
+1. O app envia apenas o **elenco escalado** (clube, formação e os 11 jogadores
+   por `clube/ano/nome`).
+2. A função [`submit-season`](supabase/functions/submit-season/index.ts):
+   - exige usuário **autenticado**;
+   - **valida** o elenco contra o dataset canônico do servidor
+     ([`_shared/dataset.ts`](supabase/functions/_shared/dataset.ts)) — posição e
+     rating vêm do servidor, então **não dá para inflar atributos** nem
+     escalar jogadores inexistentes;
+   - **simula a temporada no servidor** com uma *seed* (auditável);
+   - grava estatísticas e título com a **service role** (a tabela é fechada por
+     RLS para o cliente);
+   - devolve a temporada para o app apenas **reproduzir** (o jogo que você
+     assiste é exatamente o que foi registrado).
+
+**Deploy da função** (precisa do [Supabase CLI](https://supabase.com/docs/guides/cli)):
+
+```bash
+supabase login
+supabase link --project-ref SEU_PROJECT_REF
+supabase functions deploy submit-season    # ou: npm run supabase:deploy
+```
+
+As variáveis `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`
+já são injetadas automaticamente no ambiente da função.
+
+> **Mantendo em sincronia:** `www/js/data.js` (cliente) e
+> `supabase/functions/_shared/dataset.ts` (servidor) precisam ter os mesmos
+> jogadores. O teste `npm run test:parity` verifica isso.
+>
+> **Limitação atual:** o sorteio do draft ainda acontece no cliente — o
+> servidor valida o *elenco final*, mas não dirige o sorteio. Tornar o draft
+> 100% autoritativo (servidor sorteia e registra cada escolha) é o próximo
+> passo natural.
+
 ## 🗂️ Estrutura
 
 ```
@@ -110,10 +149,18 @@ ProjetoLFU/
 │       ├── store.js          # contas, estatísticas e ranking (nuvem/local)
 │       └── ui.js             # telas e narração ao vivo
 ├── supabase/
-│   └── schema.sql            # tabelas, RLS e função de ranking (rodar no Supabase)
+│   ├── schema.sql            # tabelas, RLS e função de ranking (rodar no Supabase)
+│   └── functions/
+│       ├── _shared/
+│       │   ├── dataset.ts    # dataset canônico (servidor)
+│       │   ├── engine.ts     # simulação autoritativa (seed)
+│       │   └── validate.ts   # validação do elenco
+│       └── submit-season/
+│           └── index.ts      # Edge Function: valida + simula + grava
 └── tools/
     ├── serve.js              # servidor estático de desenvolvimento
-    └── test-engine.js        # testes da lógica
+    ├── test-engine.js        # testes da lógica
+    └── test-parity.js        # confere cliente x servidor (dataset)
 ```
 
 ## 🚀 Próximos passos (ideias)

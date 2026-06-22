@@ -99,14 +99,12 @@
 
   async function signUp(email, password, username) {
     if (!cloud) throw new Error('Contas na nuvem nao estao configuradas (modo local).');
-    const { data, error } = await client.auth.signUp({ email, password });
+    // O perfil e criado pelo trigger do banco (handle_new_user). O nome de
+    // exibicao vai nos metadados; o cliente NAO escreve estatisticas direto.
+    const { error } = await client.auth.signUp({
+      email, password, options: { data: { username: username || email.split('@')[0] } }
+    });
     if (error) throw error;
-    const uid = data.user && data.user.id;
-    if (uid) {
-      await client.from('profiles').upsert({
-        id: uid, username: username || email.split('@')[0]
-      });
-    }
     return { email, username };
   }
 
@@ -159,55 +157,33 @@
     return localProfile();
   }
 
+  // No MODO LOCAL, a gravacao acontece aqui (sem validacao - e o proprio
+  // aparelho). No MODO NUVEM, NADA e gravado pelo cliente: a fonte de verdade
+  // e a Edge Function submitSeason(), que valida e simula no servidor.
   async function recordSeason(r) {
-    if (cloud) {
-      const { data: u } = await client.auth.getUser();
-      const user = u && u.user;
-      if (!user) throw new Error('Faca login para salvar suas estatisticas na nuvem.');
-      const { data: row } = await client.from('profiles').select('*').eq('id', user.id).maybeSingle();
-      const stats = mergeSeason({
-        seasonsPlayed: row ? (row.seasons || 0) : 0,
-        wins: row ? (row.wins || 0) : 0,
-        draws: row ? (row.draws || 0) : 0,
-        losses: row ? (row.losses || 0) : 0,
-        goalsFor: row ? (row.goals_for || 0) : 0,
-        goalsAgainst: row ? (row.goals_against || 0) : 0,
-        titles: row ? (row.titles || 0) : 0,
-        bestFinish: row ? row.best_finish : null,
-        formationUsage: (row && row.formation_usage) || {}
-      }, r);
-      await client.from('profiles').upsert({
-        id: user.id,
-        username: (row && row.username) || user.email,
-        seasons: stats.seasonsPlayed,
-        titles: stats.titles,
-        wins: stats.wins,
-        draws: stats.draws,
-        losses: stats.losses,
-        goals_for: stats.goalsFor,
-        goals_against: stats.goalsAgainst,
-        best_finish: stats.bestFinish,
-        formation_usage: stats.formationUsage,
-        updated_at: new Date().toISOString()
-      });
-      return;
-    }
     const profile = localProfile();
     mergeSeason(profile.stats, r);
     lsSet(LS_PROFILE, profile);
   }
 
-  // ---------- ranking global de titulos por time ----------
-
   async function incrementTeamTitle(club) {
-    if (cloud) {
-      const { error } = await client.rpc('increment_team_title', { p_club: club });
-      if (error) throw error;
-      return;
-    }
     const titles = lsGet(LS_TITLES, {});
     titles[club] = (titles[club] || 0) + 1;
     lsSet(LS_TITLES, titles);
+  }
+
+  // ---------- temporada validada no servidor (modo nuvem) ----------
+
+  // Envia o elenco escalado; o SERVIDOR valida contra o dataset, simula a
+  // temporada de forma autoritativa, grava estatisticas/titulo e devolve a
+  // temporada para o cliente reproduzir.
+  // payload = { club, formationId, players:[{ club, year, name }] }
+  async function submitSeason(payload) {
+    if (!cloud) throw new Error('submitSeason e exclusivo do modo nuvem.');
+    const { data, error } = await client.functions.invoke('submit-season', { body: payload });
+    if (error) throw error;
+    if (data && data.error) throw new Error(data.error);
+    return data;
   }
 
   async function getTeamTitleRanking() {
@@ -236,7 +212,7 @@
     init, isCloud,
     signUp, signIn, signOut, currentUser,
     getProfile, recordSeason,
-    incrementTeamTitle, getTeamTitleRanking,
+    incrementTeamTitle, submitSeason, getTeamTitleRanking,
     getLocalName, setLocalName
   };
 })(typeof window !== 'undefined' ? window : globalThis);

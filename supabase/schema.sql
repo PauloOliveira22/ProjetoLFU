@@ -1,16 +1,20 @@
 -- =====================================================================
--- Brasileirao Draft - Schema do Supabase
+-- Brasileirao Draft - Schema do Supabase (com validacao server-side)
 -- =====================================================================
 -- Como usar:
 --   1. Crie um projeto gratis em https://supabase.com
---   2. Abra: SQL Editor > New query
---   3. Cole TODO este arquivo e clique em "Run"
---   4. Copie a URL e a "anon key" em Project Settings > API
---      e cole em www/js/config.js
+--   2. SQL Editor > New query > cole TODO este arquivo > Run
+--   3. Copie URL e "anon key" em Project Settings > API e cole em www/js/config.js
+--   4. Faca deploy da Edge Function:  supabase functions deploy submit-season
+--
+-- MODELO DE SEGURANCA:
+--   - O cliente NUNCA escreve estatisticas nem titulos. Ele apenas LE.
+--   - As tabelas so sao escritas pela Edge Function "submit-season", que usa
+--     a service role (ignora RLS) depois de validar e simular no servidor.
 -- =====================================================================
 
 -- ---------------------------------------------------------------------
--- Tabela de perfis (1 linha por usuario autenticado).
+-- Perfis (1 linha por usuario). Cliente apenas LE o proprio perfil.
 -- ---------------------------------------------------------------------
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
@@ -30,21 +34,18 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
--- Cada usuario so enxerga/edita o proprio perfil.
+-- Apenas LEITURA do proprio perfil. (Sem policies de insert/update: o cliente
+-- nao consegue escrever; quem grava e a Edge Function via service role.)
 drop policy if exists "profiles_select_own" on public.profiles;
 create policy "profiles_select_own" on public.profiles
   for select using (auth.uid() = id);
 
 drop policy if exists "profiles_insert_own" on public.profiles;
-create policy "profiles_insert_own" on public.profiles
-  for insert with check (auth.uid() = id);
-
 drop policy if exists "profiles_update_own" on public.profiles;
-create policy "profiles_update_own" on public.profiles
-  for update using (auth.uid() = id) with check (auth.uid() = id);
 
 -- ---------------------------------------------------------------------
--- Ranking GLOBAL: quantas vezes os usuarios levaram cada time ao titulo.
+-- Ranking GLOBAL de titulos por time. Leitura para todos; escrita so via
+-- a funcao bump_team_title (chamada pela Edge Function / service role).
 -- ---------------------------------------------------------------------
 create table if not exists public.team_titles (
   club text primary key,
@@ -53,35 +54,31 @@ create table if not exists public.team_titles (
 
 alter table public.team_titles enable row level security;
 
--- Leitura liberada para todos (inclusive visitantes).
 drop policy if exists "team_titles_read_all" on public.team_titles;
 create policy "team_titles_read_all" on public.team_titles
   for select using (true);
 
--- A escrita NAO e liberada por policy: so acontece via a funcao abaixo,
--- que roda com privilegios elevados (security definer) e exige login.
--- Isso evita que alguem altere a contagem diretamente.
-create or replace function public.increment_team_title(p_club text)
+-- Incremento atomico (evita corrida entre dois campeoes simultaneos).
+create or replace function public.bump_team_title(p_club text)
 returns void
 language plpgsql
 security definer
 set search_path = public
 as $$
 begin
-  if auth.uid() is null then
-    raise exception 'login obrigatorio';
-  end if;
   insert into public.team_titles (club, titles)
   values (p_club, 1)
   on conflict (club) do update set titles = public.team_titles.titles + 1;
 end;
 $$;
 
-grant execute on function public.increment_team_title(text) to authenticated;
+-- So o servidor pode executar (nao exponha para anon/authenticated).
+revoke all on function public.bump_team_title(text) from public, anon, authenticated;
+grant execute on function public.bump_team_title(text) to service_role;
 
 -- ---------------------------------------------------------------------
--- (Opcional) Trigger para criar o perfil automaticamente no cadastro.
--- O cliente ja faz um upsert no signUp, entao isto e apenas um reforco.
+-- Cria o perfil automaticamente quando um usuario se cadastra.
+-- Usa o username dos metadados, se enviado no signUp.
 -- ---------------------------------------------------------------------
 create or replace function public.handle_new_user()
 returns trigger
@@ -91,7 +88,7 @@ set search_path = public
 as $$
 begin
   insert into public.profiles (id, username)
-  values (new.id, split_part(new.email, '@', 1))
+  values (new.id, coalesce(new.raw_user_meta_data ->> 'username', split_part(new.email, '@', 1)))
   on conflict (id) do nothing;
   return new;
 end;

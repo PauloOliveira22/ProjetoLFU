@@ -110,6 +110,8 @@
       name: player.name,
       pos: player.pos,
       rating: player.rating,
+      fromClub: squad.club,
+      fromYear: squad.year,
       from: squad.club + ' ' + squad.year
     };
     state.picks.push(entry);
@@ -258,12 +260,37 @@
 
     const teams = [userTeam].concat(opponents);
     const fixtures = roundRobin(teams);
+    const table = newTable(teams.map((t) => ({ name: t.name, isUser: !!t.isUser })));
+
+    return { mode: 'local', teams, fixtures, table, round: 0, results: [] };
+  }
+
+  function newTable(teamRefs) {
     const table = {};
-    teams.forEach((t) => {
+    teamRefs.forEach((t) => {
       table[t.name] = { name: t.name, isUser: !!t.isUser, P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, Pts: 0 };
     });
+    return table;
+  }
 
-    return { teams, fixtures, table, round: 0, results: [] };
+  // Monta uma temporada a partir de dados JA simulados pelo servidor (modo
+  // nuvem). O cliente apenas reproduz/exibe; nada e recalculado aqui.
+  // serverData = { userName, opponents:[{name,overall}], rounds:[
+  //   { userMatch:{home,away,events,scoreA,scoreB}, others:[{home,away,sh,sa}] } ] }
+  function buildCloudSeason(userName, serverData) {
+    const refs = [{ name: userName, isUser: true }]
+      .concat(serverData.opponents.map((o) => ({ name: o.name, isUser: false })));
+    return {
+      mode: 'cloud',
+      userName,
+      server: serverData,
+      opponents: serverData.opponents,
+      fixtures: serverData.rounds,   // 1 entrada por rodada
+      rounds: serverData.rounds,
+      table: newTable(refs),
+      round: 0,
+      results: []
+    };
   }
 
   function roundRobin(teams) {
@@ -296,6 +323,8 @@
   }
 
   function playRound(season) {
+    if (season.mode === 'cloud') return playRoundCloud(season);
+
     const fixtures = season.fixtures[season.round];
     let userResult = null;
     const others = [];
@@ -313,6 +342,38 @@
     season.results.push({ round: season.round, userResult, others });
     season.round++;
     return { userResult, others, roundIndex: season.round - 1 };
+  }
+
+  // Reproduz uma rodada vinda do servidor (modo nuvem): apenas aplica os
+  // placares ja decididos na tabela e repassa os eventos para narracao.
+  function playRoundCloud(season) {
+    const rd = season.rounds[season.round];
+    const u = rd.userMatch;
+    applyResult(season.table, { name: u.home }, { name: u.away }, u.scoreA, u.scoreB);
+    (rd.others || []).forEach((o) => {
+      applyResult(season.table, { name: o.home }, { name: o.away }, o.sh, o.sa);
+    });
+    const userResult = {
+      teamA: { name: u.home }, teamB: { name: u.away },
+      scoreA: u.scoreA, scoreB: u.scoreB, events: u.events || []
+    };
+    season.results.push({ round: season.round, userResult, others: rd.others || [] });
+    season.round++;
+    return { userResult, others: rd.others || [], roundIndex: season.round - 1 };
+  }
+
+  // Proximo adversario do usuario na rodada atual (serve para os dois modos).
+  function nextUserMatch(season) {
+    if (season.mode === 'cloud') {
+      const u = season.rounds[season.round].userMatch;
+      const oppName = u.home === season.userName ? u.away : u.home;
+      const o = season.opponents.find((x) => x.name === oppName);
+      return { name: oppName, overall: o ? o.overall : '—' };
+    }
+    const fixture = season.fixtures[season.round];
+    const pair = fixture.find((m) => m[0].isUser || m[1].isUser);
+    const opp = pair[0].isUser ? pair[1] : pair[0];
+    return { name: opp.name, overall: opp.overall };
   }
 
   function seasonFinished(season) {
@@ -354,7 +415,9 @@
     clubToTeam,
     simulateMatch,
     buildSeason,
+    buildCloudSeason,
     playRound,
+    nextUserMatch,
     seasonFinished,
     standings
   };

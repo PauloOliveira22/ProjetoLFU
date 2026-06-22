@@ -17,6 +17,8 @@
   let representedClub; // clube que o jogador representa
   let season;         // estado da temporada
   let liveTimer;      // timer da narracao ao vivo
+  let seasonRecorded; // no modo nuvem, se a temporada foi validada/gravada
+  let seasonNote;     // aviso quando a validacao no servidor falha
 
   function el(id) { return document.getElementById(id); }
   function render(html) { app.innerHTML = html; }
@@ -207,16 +209,36 @@
 
   // ---------- Temporada ----------
 
-  function startSeason() {
-    season = E.buildSeason(userTeam, 8);
+  async function startSeason() {
+    seasonRecorded = false;
+    seasonNote = '';
+    if (S.isCloud()) {
+      render(`<section class="screen"><h2>⏳</h2>
+        <p class="hint">Validando seu elenco e simulando a temporada no servidor...</p></section>`);
+      try {
+        const payload = {
+          club: representedClub,
+          formationId: userTeam.formation.id,
+          players: userTeam.players.map((p) => ({ club: p.fromClub, year: p.fromYear, name: p.name }))
+        };
+        const server = await S.submitSeason(payload);
+        season = E.buildCloudSeason(userTeam.name, server);
+        seasonRecorded = true; // ja gravado de forma autoritativa no servidor
+      } catch (e) {
+        // Sem servidor: joga localmente, mas NAO conta para o ranking global.
+        season = E.buildSeason(userTeam, 8);
+        seasonNote = '⚠️ Não foi possível validar no servidor (' + (e.message || e) +
+          '). Esta temporada não conta no ranking global — faça login e tente novamente.';
+      }
+    } else {
+      season = E.buildSeason(userTeam, 8);
+    }
     showRoundIntro();
   }
 
   function showRoundIntro() {
     if (E.seasonFinished(season)) { showChampion(); return; }
-    const fixture = season.fixtures[season.round];
-    const userMatch = fixture.find((m) => m[0].isUser || m[1].isUser);
-    const opp = userMatch[0].isUser ? userMatch[1] : userMatch[0];
+    const opp = E.nextUserMatch(season);
 
     render(`
       <section class="screen round-intro">
@@ -341,25 +363,29 @@
     const won = champ.isUser;
     const me = season.table[userTeam.name];
 
-    // Registra a temporada (estatisticas + ranking global de titulos).
+    // Registro da temporada:
+    //  - MODO NUVEM: ja foi validado/gravado no servidor (startSeason).
+    //  - MODO LOCAL: grava agora neste aparelho.
     let saveNote = '';
-    try {
-      await S.recordSeason({
-        club: representedClub,
-        finishPos: mePos,
-        isChampion: won,
-        wins: me.W, draws: me.D, losses: me.L,
-        goalsFor: me.GF, goalsAgainst: me.GA,
-        formationId: userTeam.formation.id
-      });
-      if (won) await S.incrementTeamTitle(representedClub);
-      saveNote = S.isCloud()
-        ? 'Estatísticas salvas na sua conta.'
-        : 'Estatísticas salvas neste aparelho.';
-    } catch (e) {
-      saveNote = (S.isCloud()
-        ? '⚠️ Faça login na sua conta para salvar e contar no ranking global.'
-        : '⚠️ Não foi possível salvar as estatísticas.');
+    if (S.isCloud()) {
+      saveNote = seasonRecorded
+        ? '✅ Resultado validado e salvo no servidor — conta no ranking global.'
+        : seasonNote;
+    } else {
+      try {
+        await S.recordSeason({
+          club: representedClub,
+          finishPos: mePos,
+          isChampion: won,
+          wins: me.W, draws: me.D, losses: me.L,
+          goalsFor: me.GF, goalsAgainst: me.GA,
+          formationId: userTeam.formation.id
+        });
+        if (won) await S.incrementTeamTitle(representedClub);
+        saveNote = 'Estatísticas salvas neste aparelho.';
+      } catch (e) {
+        saveNote = '⚠️ Não foi possível salvar as estatísticas.';
+      }
     }
 
     render(`
