@@ -5,22 +5,21 @@ viciante, no espírito dos joguinhos virais de Copa:
 
 1. **Clube** — você escolhe um clube brasileiro para **representar**. Cada
    título conquistado conta no **ranking global de títulos por time**.
-2. **Formação** — escolha a tática do time (**4-3-3, 4-4-2, 3-5-2,
-   4-2-3-1 ou 5-3-2**), que define quantos jogadores de cada posição você terá.
-3. **Draft** — o jogo sorteia um **elenco histórico** de um clube brasileiro
-   (ex.: *Santos 1962*, *Flamengo 1981*, *Palmeiras 2022*), com **plantel
-   completo (~23 jogadores)**, e você escolhe **qualquer jogador** de uma
-   posição ainda em aberto. As **notas (overall) ficam ocultas** durante o
-   draft — só aparecem no resumo do time, para dificultar a escolha.
+2. **Formação** — escolha a tática (**4-3-3, 4-4-2, 3-5-2, 4-2-3-1 ou 5-3-2**),
+   expressa nas **7 posições** reais: goleiro, zagueiro, lateral, volante,
+   meia, ponta e atacante.
+3. **Draft** — o jogo sorteia um **elenco real da Série A (2003–2025)** e você
+   escolhe **qualquer jogador** de uma posição ainda em aberto. As **notas
+   (overall) ficam ocultas** durante o draft — só aparecem no resumo do time.
 4. Repete até completar os **11 titulares**.
 5. Com o time pronto, você disputa o **Brasileirão Série A (20 times, ida e
-   volta = 38 rodadas)** com partidas
-   **simuladas**: placar dinâmico ao vivo + narração em texto.
-5. Termine no topo da **tabela** e seja **campeão**.
+   volta = 38 rodadas)** com partidas **simuladas**: placar dinâmico ao vivo +
+   narração em texto. Termine no topo e seja **campeão** — ou caia entre os 4
+   últimos e seja **rebaixado**.
 
-> O elenco de jogadores é um conjunto inicial/ilustrativo (homenagem a craques
-> do futebol brasileiro), pensado para ser **facilmente expandido** em
-> `www/js/data.js`.
+> Os elencos vêm de um dataset real (`data/brasileirao_2003_2025.csv`) com
+> ~9.200 jogadores. O arquivo `www/js/data.js` é **gerado** a partir dele
+> (veja "Dataset" abaixo).
 
 ## 🧱 Stack
 
@@ -127,14 +126,27 @@ supabase functions deploy submit-season    # ou: npm run supabase:deploy
 As variáveis `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`
 já são injetadas automaticamente no ambiente da função.
 
-> **Mantendo em sincronia:** `www/js/data.js` (cliente) e
-> `supabase/functions/_shared/dataset.ts` (servidor) precisam ter os mesmos
-> jogadores. O teste `npm run test:parity` verifica isso.
->
 > **Limitação atual:** o sorteio do draft ainda acontece no cliente — o
 > servidor valida o *elenco final*, mas não dirige o sorteio. Tornar o draft
 > 100% autoritativo (servidor sorteia e registra cada escolha) é o próximo
 > passo natural.
+
+## 📦 Dataset (elencos do draft)
+
+A fonte é `data/brasileirao_2003_2025.csv` (`ano, clube, jogador, posicao,
+overall, jogos`). O pipeline gera os dois lados a partir dela:
+
+```bash
+npm run data:build   # = import:csv (CSV -> data.js) + gen:dataset (data.js -> dataset.ts)
+```
+
+- `import:csv` mapeia as posições do CSV para as **7 do jogo**
+  (Goleiro→GK, Zagueiro→ZAG, Lateral→LAT, Volante→VOL, Meia→MEI, Ponta→PON,
+  Atacante→ATA) e descarta elencos com poucos dados (< 16 jogadores).
+- `gen:dataset` regenera o dataset canônico do servidor a partir do `data.js`,
+  garantindo paridade. `npm run test:parity` confere as quantidades.
+
+Para adicionar/ajustar jogadores, edite o CSV e rode `npm run data:build`.
 
 ## 🗂️ Estrutura
 
@@ -147,10 +159,12 @@ ProjetoLFU/
 │   ├── css/styles.css
 │   └── js/
 │       ├── config.js         # chaves do Supabase (vazio = modo local)
-│       ├── data.js           # elencos históricos + clubes
+│       ├── data.js           # GERADO: elencos reais 2003-2025 + clubes
 │       ├── engine.js         # draft, simulação de partida e temporada
 │       ├── store.js          # contas, estatísticas e ranking (nuvem/local)
 │       └── ui.js             # telas e narração ao vivo
+├── data/
+│   └── brasileirao_2003_2025.csv  # fonte dos elencos (entrada do pipeline)
 ├── supabase/
 │   ├── schema.sql            # tabelas, RLS e função de ranking (rodar no Supabase)
 │   └── functions/
@@ -162,6 +176,8 @@ ProjetoLFU/
 │           └── index.ts      # Edge Function: valida + simula + grava
 └── tools/
     ├── serve.js              # servidor estático de desenvolvimento
+    ├── import-csv.js         # CSV -> www/js/data.js
+    ├── gen-dataset.js        # data.js -> dataset.ts (servidor)
     ├── test-engine.js        # testes da lógica
     └── test-parity.js        # confere cliente x servidor (dataset)
 ```

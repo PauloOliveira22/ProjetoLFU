@@ -32,26 +32,31 @@ E.FORMATIONS.forEach((formation) => {
   assert(ok, formation.id + ': contagem por posicao bate com a tatica');
 });
 
-// 1b) Nao e possivel exceder o limite de uma posicao (ex.: 11 atacantes).
-//     Em 4-3-3 ha 3 vagas de ATA; a 4a tentativa deve ser rejeitada.
+// 1b) Nao e possivel exceder o limite de uma posicao.
+//     No 4-3-3 ha 1 vaga de ATA; a 2a tentativa deve ser rejeitada.
 const dGuard = E.newDraft('4-3-3');
 const fakeSquad = { club: 'X', year: 1, players: [
-  { name: 'A', pos: 'FWD', rating: 80 }, { name: 'B', pos: 'FWD', rating: 80 },
-  { name: 'C', pos: 'FWD', rating: 80 }, { name: 'D', pos: 'FWD', rating: 80 }
+  { name: 'A', pos: 'ATA', rating: 80 }, { name: 'B', pos: 'ATA', rating: 80 }
 ] };
 let threw = false;
 try {
-  fakeSquad.players.forEach((p) => E.pickPlayer(dGuard, fakeSquad, p)); // 4o estoura o limite
+  fakeSquad.players.forEach((p) => E.pickPlayer(dGuard, fakeSquad, p)); // 2o estoura o limite
 } catch (e) { threw = true; }
 assert(threw, 'rejeita preencher mais que o limite da posicao na formacao');
-assert(E.filledByPos(dGuard).FWD === 3, 'parou exatamente em 3 atacantes (4-3-3)');
+assert(E.filledByPos(dGuard).ATA === 1, 'parou exatamente em 1 atacante (4-3-3)');
 
-// 1c) No inicio do draft (todas as posicoes abertas) o time sorteado oferece
-//     o plantel completo (>= 23 jogadores para escolha).
+// 1c) No inicio do draft (todas as posicoes do 4-3-3 abertas) o time sorteado
+//     oferece o plantel completo para escolha.
 const dFull = E.newDraft('4-3-3');
 const firstDraw = E.drawTeamForDraft(dFull);
-assert(firstDraw.selectable.length >= 23,
-  'time sorteado oferece >= 23 jogadores no inicio (tem ' + firstDraw.selectable.length + ')');
+assert(firstDraw.selectable.length >= 16,
+  'time sorteado oferece o plantel completo no inicio (tem ' + firstDraw.selectable.length + ')');
+
+// 1d) As 5 formacoes somam 11 e usam as 7 posicoes conhecidas.
+E.FORMATIONS.forEach((f) => {
+  const sum = E.POS_ORDER.reduce((a, pos) => a + (f.counts[pos] || 0), 0);
+  assert(sum === 11, f.id + ': soma 11 jogadores (tem ' + sum + ')');
+});
 
 // 2) Time montado tem ratings coerentes.
 const draft = E.newDraft('4-3-3');

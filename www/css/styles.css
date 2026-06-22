@@ -8,9 +8,12 @@
   --card: #ffffff;
   --muted: #7a8a80;
   --pos-gk: #e0a106;
-  --pos-def: #1f7ae0;
-  --pos-mid: #16a34a;
-  --pos-fwd: #e0392b;
+  --pos-zag: #1f7ae0;
+  --pos-lat: #3aa3e0;
+  --pos-vol: #0f9488;
+  --pos-mei: #16a34a;
+  --pos-pon: #e07b1f;
+  --pos-ata: #e0392b;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -172,9 +175,12 @@ h2 { font-size: 1.5rem; }
 }
 .rating-hidden { background: var(--muted); color: #fff; }
 .pos-GK { background: var(--pos-gk); }
-.pos-DEF { background: var(--pos-def); }
-.pos-MID { background: var(--pos-mid); }
-.pos-FWD { background: var(--pos-fwd); }
+.pos-ZAG { background: var(--pos-zag); }
+.pos-LAT { background: var(--pos-lat); }
+.pos-VOL { background: var(--pos-vol); }
+.pos-MEI { background: var(--pos-mei); }
+.pos-PON { background: var(--pos-pon); }
+.pos-ATA { background: var(--pos-ata); }
 
 /* ----- Resumo do time ----- */
 .ratings { display: flex; gap: 10px; }

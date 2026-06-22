@@ -51,8 +51,11 @@ function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min
 
 function ratingsForXI(players: Player[]) {
   const avg = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 75);
-  const by = (pos: string) => players.filter((p) => p.pos === pos).map((p) => p.rating);
-  const gk = avg(by('GK')); const def = avg(by('DEF')); const mid = avg(by('MID')); const fwd = avg(by('FWD'));
+  const rt = (poss: string[]) => players.filter((p) => poss.indexOf(p.pos) !== -1).map((p) => p.rating);
+  const gk = avg(rt(['GK']));
+  const def = avg(rt(['ZAG', 'LAT']));
+  const mid = avg(rt(['VOL', 'MEI']));
+  const fwd = avg(rt(['PON', 'ATA']));
   return {
     attack: fwd * 0.6 + mid * 0.4,
     defense: def * 0.6 + gk * 0.4,
@@ -98,7 +101,7 @@ export function simulateSeason(club: string, xi: Player[], seed: number, numClub
 
   function scorer(team: Team): string {
     if (team.players && team.players.length) {
-      const att = team.players.filter((p) => p.pos === 'FWD' || p.pos === 'MID');
+      const att = team.players.filter((p) => p.pos === 'ATA' || p.pos === 'PON' || p.pos === 'MEI');
       return rpick(att.length ? att : team.players).name;
     }
     return team.name;

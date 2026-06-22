@@ -43,7 +43,8 @@ export function validateRoster(payload: unknown): ValidationResult {
     xi.push({ name: player.name, pos: player.pos, rating: player.rating });
   }
 
-  const counts: Record<string, number> = { GK: 0, DEF: 0, MID: 0, FWD: 0 };
+  const counts: Record<string, number> = {};
+  POS_ORDER.forEach((pos) => { counts[pos] = 0; });
   xi.forEach((pl) => { counts[pl.pos]++; });
   for (const pos of POS_ORDER) {
     if (counts[pos] !== (formation.counts[pos] || 0)) {

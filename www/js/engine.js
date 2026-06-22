@@ -15,17 +15,21 @@
 
   const data = global.LFU.data;
 
-  // Posicoes: GK (goleiro), DEF (defensor), MID (meio-campo), FWD (ataque).
-  const POS_ORDER = ['GK', 'DEF', 'MID', 'FWD'];
-  const POS_NAME = { GK: 'Goleiro', DEF: 'Defensor', MID: 'Meia', FWD: 'Atacante' };
+  // Posicoes (7): GK (goleiro), ZAG (zagueiro), LAT (lateral), VOL (volante),
+  // MEI (meia), PON (ponta), ATA (atacante).
+  const POS_ORDER = ['GK', 'ZAG', 'LAT', 'VOL', 'MEI', 'PON', 'ATA'];
+  const POS_NAME = {
+    GK: 'Goleiro', ZAG: 'Zagueiro', LAT: 'Lateral', VOL: 'Volante',
+    MEI: 'Meia', PON: 'Ponta', ATA: 'Atacante'
+  };
 
-  // Formacoes taticas disponiveis (cada contagem soma 11 jogadores).
+  // Formacoes taticas (cada contagem soma 11 jogadores, sobre as 7 posicoes).
   const FORMATIONS = [
-    { id: '4-3-3', name: '4-3-3', desc: 'Equilibrado, com tres atacantes', counts: { GK: 1, DEF: 4, MID: 3, FWD: 3 } },
-    { id: '4-4-2', name: '4-4-2', desc: 'Classico e solido', counts: { GK: 1, DEF: 4, MID: 4, FWD: 2 } },
-    { id: '3-5-2', name: '3-5-2', desc: 'Meio-campo povoado', counts: { GK: 1, DEF: 3, MID: 5, FWD: 2 } },
-    { id: '4-2-3-1', name: '4-2-3-1', desc: 'Controle e um centroavante', counts: { GK: 1, DEF: 4, MID: 5, FWD: 1 } },
-    { id: '5-3-2', name: '5-3-2', desc: 'Defensivo, com alas', counts: { GK: 1, DEF: 5, MID: 3, FWD: 2 } }
+    { id: '4-3-3', name: '4-3-3', desc: 'Equilibrado, com dois pontas', counts: { GK: 1, ZAG: 2, LAT: 2, VOL: 1, MEI: 2, PON: 2, ATA: 1 } },
+    { id: '4-4-2', name: '4-4-2', desc: 'Classico, dois atacantes', counts: { GK: 1, ZAG: 2, LAT: 2, VOL: 2, MEI: 2, PON: 0, ATA: 2 } },
+    { id: '3-5-2', name: '3-5-2', desc: 'Meio-campo povoado', counts: { GK: 1, ZAG: 3, LAT: 2, VOL: 1, MEI: 2, PON: 0, ATA: 2 } },
+    { id: '4-2-3-1', name: '4-2-3-1', desc: 'Dois volantes e um centroavante', counts: { GK: 1, ZAG: 2, LAT: 2, VOL: 2, MEI: 1, PON: 2, ATA: 1 } },
+    { id: '5-3-2', name: '5-3-2', desc: 'Defensivo, tres zagueiros', counts: { GK: 1, ZAG: 3, LAT: 2, VOL: 2, MEI: 1, PON: 0, ATA: 2 } }
   ];
 
   // ---------- Utilidades ----------
@@ -72,7 +76,8 @@
 
   // Quantos jogadores de cada posicao ja foram escolhidos.
   function filledByPos(state) {
-    const f = { GK: 0, DEF: 0, MID: 0, FWD: 0 };
+    const f = {};
+    POS_ORDER.forEach((pos) => { f[pos] = 0; });
     state.picks.forEach((p) => { f[p.pos]++; });
     return f;
   }
@@ -122,11 +127,11 @@
   // ---------- Avaliacao de time ----------
 
   function ratingsForXI(players) {
-    const byPos = (pos) => players.filter((p) => p.pos === pos).map((p) => p.rating);
-    const gk = avg(byPos('GK')) || 75;
-    const def = avg(byPos('DEF')) || 75;
-    const mid = avg(byPos('MID')) || 75;
-    const fwd = avg(byPos('FWD')) || 75;
+    const rt = (poss) => players.filter((p) => poss.indexOf(p.pos) !== -1).map((p) => p.rating);
+    const gk = avg(rt(['GK'])) || 75;
+    const def = avg(rt(['ZAG', 'LAT'])) || 75;   // defensores: zagueiros + laterais
+    const mid = avg(rt(['VOL', 'MEI'])) || 75;   // meio-campo: volantes + meias
+    const fwd = avg(rt(['PON', 'ATA'])) || 75;   // ataque: pontas + atacantes
 
     const attack = fwd * 0.6 + mid * 0.4;
     const defense = def * 0.6 + gk * 0.4;
@@ -195,7 +200,7 @@
 
   function scorerFrom(team) {
     if (team.players && team.players.length) {
-      const att = team.players.filter((p) => p.pos === 'FWD' || p.pos === 'MID');
+      const att = team.players.filter((p) => p.pos === 'ATA' || p.pos === 'PON' || p.pos === 'MEI');
       const p = pick(att.length ? att : team.players);
       return p.name;
     }

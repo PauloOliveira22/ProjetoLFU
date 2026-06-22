@@ -9,7 +9,7 @@
   const E = global.LFU.engine;
   const S = global.LFU.store;
 
-  const POS_LABEL = { GK: 'GOL', DEF: 'DEF', MID: 'MEI', FWD: 'ATA' };
+  const POS_LABEL = { GK: 'GOL', ZAG: 'ZAG', LAT: 'LAT', VOL: 'VOL', MEI: 'MEI', PON: 'PON', ATA: 'ATA' };
 
   let app;            // container raiz
   let draft;          // estado do draft
@@ -95,7 +95,7 @@
   function showFormationSelect() {
     const cards = E.FORMATIONS.map((f) => {
       const c = f.counts;
-      const breakdown = `${c.DEF} DEF · ${c.MID} MEI · ${c.FWD} ATA`;
+      const breakdown = `${c.ZAG} ZAG · ${c.LAT} LAT · ${c.VOL} VOL · ${c.MEI} MEI · ${c.PON} PON · ${c.ATA} ATA`;
       return `
         <button class="formation-card" data-id="${f.id}">
           <span class="fname">${f.name}</span>
