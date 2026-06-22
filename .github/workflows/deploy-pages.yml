@@ -1,0 +1,44 @@
+name: Deploy GitHub Pages
+
+# Publica o jogo (pasta www/) no GitHub Pages.
+# Roda a cada push na branch de desenvolvimento e na main,
+# e tambem pode ser disparado manualmente em Actions > Run workflow.
+on:
+  push:
+    branches:
+      - main
+      - claude/youthful-ptolemy-d08md0
+  workflow_dispatch:
+
+# Permissoes necessarias para o deploy do Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Garante um deploy por vez.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Empacotar a pasta www/
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: www
+
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
