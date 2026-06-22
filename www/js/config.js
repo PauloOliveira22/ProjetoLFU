@@ -15,7 +15,9 @@
   'use strict';
   global.LFU = global.LFU || {};
   global.LFU.config = {
-    SUPABASE_URL: '',
-    SUPABASE_ANON_KEY: ''
+    SUPABASE_URL: 'https://ifemfjesfbbvcknppwiv.supabase.co',
+    // Chave PUBLICA (publishable). Segura no cliente: a protecao vem das
+    // policies de Row Level Security (veja supabase/schema.sql).
+    SUPABASE_ANON_KEY: 'sb_publishable_xuB_a0k-7WORK1eHp5jNdw_x8OBimJA'
   };
 })(typeof window !== 'undefined' ? window : globalThis);
