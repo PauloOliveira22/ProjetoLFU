@@ -145,11 +145,13 @@
         ${POS_LABEL[pos]} ${filled[pos]}/${total}</span>`;
     }).join('');
 
+    // Overall fica OCULTO durante o draft (revelado so no resumo do time),
+    // para dificultar a escolha.
     const playersHtml = selectable.map((p, i) => `
       <button class="player-card" data-i="${i}">
         <span class="pos pos-${p.pos}">${POS_LABEL[p.pos]}</span>
         <span class="pname">${esc(p.name)}</span>
-        <span class="rating">${p.rating}</span>
+        <span class="rating rating-hidden">?</span>
       </button>
     `).join('');
 
@@ -161,7 +163,8 @@
         <div class="drawn">
           <span class="drawn-label">Time sorteado</span>
           <h2>${esc(squad.club)} <small>${squad.year}</small></h2>
-          <p class="hint">Escolha <b>qualquer jogador</b> de uma posição ainda em aberto:</p>
+          <p class="hint">Escolha <b>qualquer jogador</b> de uma posição em aberto.
+          <br><small>As notas (overall) só aparecem no fim do draft!</small></p>
         </div>
         <div class="players">${playersHtml}</div>
       </section>
@@ -226,12 +229,12 @@
         seasonRecorded = true; // ja gravado de forma autoritativa no servidor
       } catch (e) {
         // Sem servidor: joga localmente, mas NAO conta para o ranking global.
-        season = E.buildSeason(userTeam, 8);
+        season = E.buildSeason(userTeam, 20);
         seasonNote = '⚠️ Não foi possível validar no servidor (' + (e.message || e) +
           '). Esta temporada não conta no ranking global — faça login e tente novamente.';
       }
     } else {
-      season = E.buildSeason(userTeam, 8);
+      season = E.buildSeason(userTeam, 20);
     }
     showRoundIntro();
   }

@@ -170,6 +170,7 @@ h2 { font-size: 1.5rem; }
   font-size: .7rem; font-weight: 800; color: #fff;
   border-radius: 6px; padding: 4px 7px; min-width: 38px; text-align: center;
 }
+.rating-hidden { background: var(--muted); color: #fff; }
 .pos-GK { background: var(--pos-gk); }
 .pos-DEF { background: var(--pos-def); }
 .pos-MID { background: var(--pos-mid); }

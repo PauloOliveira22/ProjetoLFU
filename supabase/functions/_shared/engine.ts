@@ -74,7 +74,7 @@ export interface SeasonResult {
   seed: number;
 }
 
-export function simulateSeason(club: string, xi: Player[], seed: number, numClubs = 8): SeasonResult {
+export function simulateSeason(club: string, xi: Player[], seed: number, numClubs = 20): SeasonResult {
   const rng = mulberry32(seed);
   const rint = (lo: number, hi: number) => Math.floor(rng() * (hi - lo + 1)) + lo;
   const rpick = <T,>(arr: T[]) => arr[rint(0, arr.length - 1)];

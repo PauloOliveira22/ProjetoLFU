@@ -46,6 +46,13 @@ try {
 assert(threw, 'rejeita preencher mais que o limite da posicao na formacao');
 assert(E.filledByPos(dGuard).FWD === 3, 'parou exatamente em 3 atacantes (4-3-3)');
 
+// 1c) No inicio do draft (todas as posicoes abertas) o time sorteado oferece
+//     o plantel completo (>= 23 jogadores para escolha).
+const dFull = E.newDraft('4-3-3');
+const firstDraw = E.drawTeamForDraft(dFull);
+assert(firstDraw.selectable.length >= 23,
+  'time sorteado oferece >= 23 jogadores no inicio (tem ' + firstDraw.selectable.length + ')');
+
 // 2) Time montado tem ratings coerentes.
 const draft = E.newDraft('4-3-3');
 while (!E.isDraftComplete(draft)) {
@@ -64,15 +71,15 @@ let ordered = true;
 for (let i = 1; i < m.events.length; i++) if (m.events[i].minute < m.events[i - 1].minute) ordered = false;
 assert(ordered, 'eventos da partida em ordem cronologica');
 
-// 4) Temporada completa: tabela consistente.
-const season = E.buildSeason(team, 8);
-assert(season.fixtures.length === 7, 'turno unico de 8 times => 7 rodadas');
+// 4) Temporada completa: tabela consistente (Serie A, 20 times).
+const season = E.buildSeason(team, 20);
+assert(season.fixtures.length === 19, 'turno unico de 20 times => 19 rodadas');
 while (!E.seasonFinished(season)) E.playRound(season);
 const tableArr = E.standings(season);
-assert(tableArr.length === 8, 'tabela com 8 times');
+assert(tableArr.length === 20, 'tabela com 20 times');
 const totalPts = tableArr.reduce((a, t) => a + t.Pts, 0);
 const totalJogos = tableArr.reduce((a, t) => a + t.P, 0) / 2; // cada jogo conta 2x
-assert(totalJogos === 28, '28 jogos no total (8 times, turno unico)');
+assert(totalJogos === 190, '190 jogos no total (20 times, turno unico)');
 assert(totalPts > 0, 'pontuacao distribuida');
 tableArr.forEach((t) => {
   assert(t.P === t.W + t.D + t.L, t.name + ': jogos = V+E+D');

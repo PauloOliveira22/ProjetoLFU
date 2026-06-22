@@ -8,10 +8,13 @@ viciante, no espírito dos joguinhos virais de Copa:
 2. **Formação** — escolha a tática do time (**4-3-3, 4-4-2, 3-5-2,
    4-2-3-1 ou 5-3-2**), que define quantos jogadores de cada posição você terá.
 3. **Draft** — o jogo sorteia um **elenco histórico** de um clube brasileiro
-   (ex.: *Santos 1962*, *Flamengo 1981*, *Palmeiras 2022*) e você escolhe
-   **qualquer jogador** de uma posição ainda em aberto.
+   (ex.: *Santos 1962*, *Flamengo 1981*, *Palmeiras 2022*), com **plantel
+   completo (~23 jogadores)**, e você escolhe **qualquer jogador** de uma
+   posição ainda em aberto. As **notas (overall) ficam ocultas** durante o
+   draft — só aparecem no resumo do time, para dificultar a escolha.
 4. Repete até completar os **11 titulares**.
-5. Com o time pronto, você disputa uma **temporada** com partidas
+5. Com o time pronto, você disputa o **Brasileirão Série A (20 times, 19
+   rodadas)** com partidas
    **simuladas**: placar dinâmico ao vivo + narração em texto.
 5. Termine no topo da **tabela** e seja **campeão**.
 
