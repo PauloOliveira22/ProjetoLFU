@@ -3,11 +3,14 @@
 Jogo mobile de futebol com tema do **Brasileirão**. A proposta é simples e
 viciante, no espírito dos joguinhos virais de Copa:
 
-1. **Draft** — o jogo sorteia um **elenco histórico** de um clube brasileiro
-   (ex.: *Santos 1962*, *Flamengo 1981*, *Palmeiras 2022*).
-2. Você **escolhe 1 jogador** daquele time para a sua escalação.
-3. Repete até completar os **11 titulares** (formação **4-3-3**).
-4. Com o time pronto, você disputa uma **temporada** com partidas
+1. **Formação** — você escolhe a tática do time (**4-3-3, 4-4-2, 3-5-2,
+   4-2-3-1 ou 5-3-2**), que define quais posições serão preenchidas.
+2. **Draft** — o jogo sorteia um **elenco histórico** de um clube brasileiro
+   (ex.: *Santos 1962*, *Flamengo 1981*, *Palmeiras 2022*) e pede uma
+   **posição específica** da sua tática.
+3. Você **escolhe 1 jogador daquela posição** para a sua escalação.
+4. Repete até preencher **todas as posições** da tática (11 titulares).
+5. Com o time pronto, você disputa uma **temporada** com partidas
    **simuladas**: placar dinâmico ao vivo + narração em texto.
 5. Termine no topo da **tabela** e seja **campeão**.
 

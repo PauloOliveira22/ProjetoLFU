@@ -10,6 +10,8 @@
 
   const POS_LABEL = { GK: 'GOL', DEF: 'DEF', MID: 'MEI', FWD: 'ATA' };
 
+  const POS_NAME = { GK: 'Goleiro', DEF: 'Defensor', MID: 'Meia', FWD: 'Atacante' };
+
   let app;        // container raiz
   let draft;      // estado do draft
   let userTeam;   // time montado
@@ -36,7 +38,7 @@
         <button class="btn btn-ghost" id="btnHow">Como jogar</button>
       </section>
     `);
-    el('btnStart').onclick = startDraft;
+    el('btnStart').onclick = showFormationSelect;
     el('btnHow').onclick = showHowTo;
   }
 
@@ -45,9 +47,10 @@
       <section class="screen">
         <h2>Como jogar</h2>
         <ol class="howto">
-          <li>O jogo <b>sorteia um elenco histórico</b> de um clube brasileiro.</li>
-          <li>Você <b>escolhe 1 jogador</b> daquele time para a sua escalação.</li>
-          <li>Repete até completar os <b>11 titulares</b> (formação 4-3-3).</li>
+          <li>Você <b>escolhe a formação tática</b> do seu time (4-3-3, 4-4-2...).</li>
+          <li>O jogo <b>sorteia um elenco histórico</b> e pede uma <b>posição</b>.</li>
+          <li>Você <b>escolhe 1 jogador</b> daquela posição para o seu time.</li>
+          <li>Repete até preencher <b>todas as posições</b> da sua tática (11 titulares).</li>
           <li>Com o time pronto, dispute o <b>Brasileirão</b>: partidas
           simuladas com placar ao vivo e narração.</li>
           <li>Termine no topo da tabela e seja <b>campeão!</b></li>
@@ -58,10 +61,39 @@
     el('btnBack').onclick = showHome;
   }
 
+  // ---------- Selecao de formacao ----------
+
+  function showFormationSelect() {
+    const cards = E.FORMATIONS.map((f) => {
+      const c = f.counts;
+      const breakdown = `${c.DEF} DEF · ${c.MID} MEI · ${c.FWD} ATA`;
+      return `
+        <button class="formation-card" data-id="${f.id}">
+          <span class="fname">${f.name}</span>
+          <span class="fdesc">${f.desc}</span>
+          <span class="fbreak">${breakdown}</span>
+        </button>`;
+    }).join('');
+
+    render(`
+      <section class="screen formation">
+        <h2>Escolha a formação</h2>
+        <p class="hint">A tática define quais posições o draft vai preencher.</p>
+        <div class="formations">${cards}</div>
+        <button class="btn btn-ghost" id="btnBack">Voltar</button>
+      </section>
+    `);
+
+    Array.from(document.querySelectorAll('.formation-card')).forEach((btn) => {
+      btn.onclick = () => startDraft(btn.dataset.id);
+    });
+    el('btnBack').onclick = showHome;
+  }
+
   // ---------- Draft ----------
 
-  function startDraft() {
-    draft = E.newDraft();
+  function startDraft(formationId) {
+    draft = E.newDraft(formationId);
     nextDraftRound();
   }
 
@@ -71,12 +103,16 @@
       showSquad();
       return;
     }
-    const { squad, selectable } = E.drawTeamForDraft(draft);
+    const { squad, selectable, targetPos } = E.drawTeamForDraft(draft);
+    const counts = draft.formation.counts;
+    const filled = E.filledByPos(draft);
 
-    const slotsHtml = E.FORMATION.map((f) => {
-      const filled = draft.slots[f.pos];
-      return `<span class="slot ${filled >= f.total ? 'full' : ''}">
-        ${POS_LABEL[f.pos]} ${filled}/${f.total}</span>`;
+    const slotsHtml = E.POS_ORDER.map((pos) => {
+      const total = counts[pos] || 0;
+      if (!total) return '';
+      const isTarget = pos === targetPos;
+      return `<span class="slot ${filled[pos] >= total ? 'full' : ''} ${isTarget ? 'target' : ''}">
+        ${POS_LABEL[pos]} ${filled[pos]}/${total}</span>`;
     }).join('');
 
     const playersHtml = selectable.map((p, i) => `
@@ -89,12 +125,13 @@
 
     render(`
       <section class="screen draft">
-        <div class="progress">Escolha ${draft.picks.length + 1} de 11</div>
+        <div class="progress">Escolha ${draft.picks.length + 1} de ${draft.slotQueue.length}
+          <span class="form-tag">${draft.formation.name}</span></div>
         <div class="slots">${slotsHtml}</div>
         <div class="drawn">
           <span class="drawn-label">Time sorteado</span>
           <h2>${squad.club} <small>${squad.year}</small></h2>
-          <p class="hint">Escolha um jogador para o seu elenco:</p>
+          <p class="hint">Escolha um <b>${POS_NAME[targetPos]}</b> para o seu time:</p>
         </div>
         <div class="players">${playersHtml}</div>
       </section>
@@ -126,7 +163,7 @@
 
     render(`
       <section class="screen squad">
-        <h2>Seu Time</h2>
+        <h2>Seu Time <span class="form-tag">${userTeam.formation.name}</span></h2>
         <div class="ratings">
           <div class="rbox"><b>${userTeam.overall}</b><span>Geral</span></div>
           <div class="rbox"><b>${userTeam.attack}</b><span>Ataque</span></div>
@@ -138,7 +175,7 @@
       </section>
     `);
     el('btnSeason').onclick = startSeason;
-    el('btnRedraft').onclick = startDraft;
+    el('btnRedraft').onclick = showFormationSelect;
   }
 
   // ---------- Temporada ----------

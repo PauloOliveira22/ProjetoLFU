@@ -2,7 +2,10 @@
  * engine.js - Logica do jogo (sem interface).
  *
  * Responsavel por:
- *  - Draft: sorteia elencos historicos e monta um XI numa formacao 4-3-3.
+ *  - Formacoes taticas: o jogador escolhe uma no inicio.
+ *  - Draft guiado por posicao: cada rodada pede UMA posicao da tatica e
+ *    sorteia um elenco, mostrando so jogadores daquela posicao. Garante
+ *    exatamente 1 jogador por slot da formacao escolhida.
  *  - Avaliacao de time: calcula ataque/defesa/overall a partir do XI.
  *  - Simulacao de partida: gera placar dinamico + narracao em texto.
  *  - Temporada: liga de pontos corridos (turno unico) com tabela.
@@ -12,12 +15,17 @@
 
   const data = global.LFU.data;
 
-  // Formacao 4-3-3: 1 goleiro, 4 defensores, 3 meias, 3 atacantes.
-  const FORMATION = [
-    { pos: 'GK', total: 1, label: 'Goleiro' },
-    { pos: 'DEF', total: 4, label: 'Defesa' },
-    { pos: 'MID', total: 3, label: 'Meio-campo' },
-    { pos: 'FWD', total: 3, label: 'Ataque' }
+  // Posicoes: GK (goleiro), DEF (defensor), MID (meio-campo), FWD (ataque).
+  const POS_ORDER = ['GK', 'DEF', 'MID', 'FWD'];
+  const POS_NAME = { GK: 'Goleiro', DEF: 'Defensor', MID: 'Meia', FWD: 'Atacante' };
+
+  // Formacoes taticas disponiveis (cada contagem soma 11 jogadores).
+  const FORMATIONS = [
+    { id: '4-3-3', name: '4-3-3', desc: 'Equilibrado, com tres atacantes', counts: { GK: 1, DEF: 4, MID: 3, FWD: 3 } },
+    { id: '4-4-2', name: '4-4-2', desc: 'Classico e solido', counts: { GK: 1, DEF: 4, MID: 4, FWD: 2 } },
+    { id: '3-5-2', name: '3-5-2', desc: 'Meio-campo povoado', counts: { GK: 1, DEF: 3, MID: 5, FWD: 2 } },
+    { id: '4-2-3-1', name: '4-2-3-1', desc: 'Controle e um centroavante', counts: { GK: 1, DEF: 4, MID: 5, FWD: 1 } },
+    { id: '5-3-2', name: '5-3-2', desc: 'Defensivo, com alas', counts: { GK: 1, DEF: 5, MID: 3, FWD: 2 } }
   ];
 
   // ---------- Utilidades ----------
@@ -35,50 +43,71 @@
     return nums.reduce((a, b) => a + b, 0) / nums.length;
   }
 
+  function getFormation(id) {
+    return FORMATIONS.find((f) => f.id === id) || FORMATIONS[0];
+  }
+
   // ---------- Draft ----------
 
-  function newDraft() {
-    const slots = {};
-    FORMATION.forEach((f) => { slots[f.pos] = 0; });
+  // Monta a fila ordenada de posicoes a preencher: GK, DEFs, MIDs, FWDs.
+  function buildSlotQueue(counts) {
+    const queue = [];
+    POS_ORDER.forEach((pos) => {
+      for (let i = 0; i < (counts[pos] || 0); i++) queue.push(pos);
+    });
+    return queue;
+  }
+
+  function newDraft(formationId) {
+    const formation = getFormation(formationId);
     return {
-      slots,                 // quantos jogadores ja escolhidos por posicao
-      picks: [],             // jogadores escolhidos (com club/year de origem)
-      pickedKeys: new Set(), // evita escolher o mesmo jogador duas vezes
-      round: 0
+      formation,
+      slotQueue: buildSlotQueue(formation.counts),
+      picks: [],
+      pickedKeys: new Set()
     };
   }
 
-  function openPositions(state) {
-    return FORMATION.filter((f) => state.slots[f.pos] < f.total).map((f) => f.pos);
-  }
-
   function isDraftComplete(state) {
-    return state.picks.length >= 11;
+    return state.picks.length >= state.slotQueue.length;
   }
 
-  // Sorteia um elenco que possua ao menos um jogador util (posicao em aberto
-  // e ainda nao escolhido). Retorna o elenco e os jogadores selecionaveis.
-  function drawTeamForDraft(state) {
-    const open = openPositions(state);
-    const usable = data.SQUADS.filter((sq) =>
-      sq.players.some((p) =>
-        open.includes(p.pos) && !state.pickedKeys.has(playerKey(sq, p))
-      )
-    );
-    const squad = pick(usable.length ? usable : data.SQUADS);
-    const selectable = squad.players.filter((p) =>
-      open.includes(p.pos) && !state.pickedKeys.has(playerKey(squad, p))
-    );
-    return { squad, selectable };
+  // Posicao que a rodada atual deve preencher.
+  function currentTargetPos(state) {
+    return state.slotQueue[state.picks.length];
+  }
+
+  // Quantos jogadores de cada posicao ja foram escolhidos.
+  function filledByPos(state) {
+    const f = { GK: 0, DEF: 0, MID: 0, FWD: 0 };
+    state.picks.forEach((p) => { f[p.pos]++; });
+    return f;
   }
 
   function playerKey(squad, player) {
     return squad.club + '|' + squad.year + '|' + player.name;
   }
 
+  function availableInSquad(state, squad, pos) {
+    return squad.players.filter((p) => p.pos === pos && !state.pickedKeys.has(playerKey(squad, p)));
+  }
+
+  // Sorteia um elenco que possua jogador(es) da posicao-alvo ainda nao
+  // escolhidos. Prefere elencos com 2+ opcoes para a escolha valer a pena.
+  function drawTeamForDraft(state) {
+    const pos = currentTargetPos(state);
+    const usable = data.SQUADS.filter((sq) => availableInSquad(state, sq, pos).length >= 1);
+    const rich = usable.filter((sq) => availableInSquad(state, sq, pos).length >= 2);
+    const pool = rich.length ? rich : usable;
+    const squad = pick(pool.length ? pool : data.SQUADS);
+    const selectable = availableInSquad(state, squad, pos);
+    return { squad, selectable, targetPos: pos };
+  }
+
   function pickPlayer(state, squad, player) {
-    if (state.slots[player.pos] >= positionTotal(player.pos)) {
-      throw new Error('Posicao ja preenchida: ' + player.pos);
+    const expected = currentTargetPos(state);
+    if (player.pos !== expected) {
+      throw new Error('Posicao incorreta: esperado ' + expected + ', recebido ' + player.pos);
     }
     const entry = {
       name: player.name,
@@ -87,15 +116,8 @@
       from: squad.club + ' ' + squad.year
     };
     state.picks.push(entry);
-    state.slots[player.pos]++;
     state.pickedKeys.add(playerKey(squad, player));
-    state.round++;
     return entry;
-  }
-
-  function positionTotal(pos) {
-    const f = FORMATION.find((x) => x.pos === pos);
-    return f ? f.total : 0;
   }
 
   // ---------- Avaliacao de time ----------
@@ -123,6 +145,7 @@
     return {
       name: name || 'Seu Time',
       isUser: true,
+      formation: draftState.formation,
       players: draftState.picks.slice(),
       attack: r.attack,
       defense: r.defense,
@@ -192,7 +215,6 @@
         scoreB++;
         events.push(goalEvent(minute, teamB, scoreA, scoreB));
       }
-      // Eventos de ambiente esporadicos (sem gol).
       if (Math.random() < 0.04) {
         events.push({ minute, type: 'flavor', text: pick(FLAVOR_LINES), scoreA, scoreB });
       }
@@ -223,7 +245,6 @@
   function buildSeason(userTeam, numClubs) {
     const n = (numClubs || 8);
     const pool = data.CLUBS.slice();
-    // embaralha e escolhe adversarios (evita repetir o nome do usuario)
     shuffle(pool);
     const opponents = pool
       .filter((c) => c.name !== userTeam.name)
@@ -240,10 +261,9 @@
     return { teams, fixtures, table, round: 0, results: [] };
   }
 
-  // Metodo do circulo para gerar rodadas (turno unico).
   function roundRobin(teams) {
     const arr = teams.slice();
-    if (arr.length % 2 !== 0) arr.push(null); // bye se impar
+    if (arr.length % 2 !== 0) arr.push(null);
     const n = arr.length;
     const rounds = [];
     for (let r = 0; r < n - 1; r++) {
@@ -254,7 +274,7 @@
         if (home && away) round.push([home, away]);
       }
       rounds.push(round);
-      arr.splice(1, 0, arr.pop()); // rotaciona mantendo o primeiro fixo
+      arr.splice(1, 0, arr.pop());
     }
     return rounds;
   }
@@ -270,8 +290,6 @@
     else { th.D++; ta.D++; th.Pts++; ta.Pts++; }
   }
 
-  // Simula a rodada atual. Retorna o resultado da partida do usuario (com
-  // eventos para narracao ao vivo) e a lista dos demais resultados.
   function playRound(season) {
     const fixtures = season.fixtures[season.round];
     let userResult = null;
@@ -316,13 +334,16 @@
 
   global.LFU = global.LFU || {};
   global.LFU.engine = {
-    FORMATION,
+    POS_ORDER,
+    POS_NAME,
+    FORMATIONS,
+    getFormation,
     newDraft,
-    openPositions,
     isDraftComplete,
+    currentTargetPos,
+    filledByPos,
     drawTeamForDraft,
     pickPlayer,
-    positionTotal,
     ratingsForXI,
     buildUserTeam,
     clubToTeam,

@@ -14,20 +14,40 @@ function assert(cond, msg) {
   else { console.log('  ok: ' + msg); }
 }
 
-// 1) Draft automatico escolhe 11 jogadores na formacao correta.
-const draft = E.newDraft();
-let guard = 0;
-while (!E.isDraftComplete(draft) && guard++ < 100) {
-  const { squad, selectable } = E.drawTeamForDraft(draft);
-  assert(selectable.length > 0, 'rodada ' + (draft.picks.length + 1) + ' tem jogadores selecionaveis');
-  E.pickPlayer(draft, squad, selectable[0]);
-}
-assert(draft.picks.length === 11, 'draft completou com 11 jogadores');
-assert(draft.slots.GK === 1 && draft.slots.DEF === 4 && draft.slots.MID === 3 && draft.slots.FWD === 3,
-  'formacao 4-3-3 respeitada');
+// 1) Para CADA formacao: o draft preenche exatamente a contagem de cada posicao,
+//    e cada rodada so oferece jogadores da posicao-alvo.
+E.FORMATIONS.forEach((formation) => {
+  const d = E.newDraft(formation.id);
+  let guard = 0;
+  while (!E.isDraftComplete(d) && guard++ < 100) {
+    const target = E.currentTargetPos(d);
+    const { squad, selectable } = E.drawTeamForDraft(d);
+    const allMatch = selectable.length > 0 && selectable.every((p) => p.pos === target);
+    assert(allMatch, formation.id + ': rodada oferece apenas ' + target);
+    E.pickPlayer(d, squad, selectable[0]);
+  }
+  const filled = E.filledByPos(d);
+  const ok = E.POS_ORDER.every((pos) => filled[pos] === (formation.counts[pos] || 0));
+  assert(d.picks.length === 11, formation.id + ': 11 titulares');
+  assert(ok, formation.id + ': contagem por posicao bate com a tatica');
+});
+
+// 1b) Nao e possivel escolher posicao errada (ex.: 11 atacantes).
+const dGuard = E.newDraft('4-3-3'); // primeira posicao da fila e GK
+let threw = false;
+try {
+  E.pickPlayer(dGuard, { club: 'X', year: 1, players: [] }, { name: 'Fake', pos: 'FWD', rating: 80 });
+} catch (e) { threw = true; }
+assert(threw, 'rejeita jogador de posicao diferente da exigida pela tatica');
 
 // 2) Time montado tem ratings coerentes.
+const draft = E.newDraft('4-3-3');
+while (!E.isDraftComplete(draft)) {
+  const { squad, selectable } = E.drawTeamForDraft(draft);
+  E.pickPlayer(draft, squad, selectable[0]);
+}
 const team = E.buildUserTeam(draft, 'Seu Time');
+assert(team.formation && team.formation.id === '4-3-3', 'time guarda a formacao escolhida');
 assert(team.overall >= 60 && team.overall <= 99, 'overall em faixa valida (' + team.overall + ')');
 assert(team.attack > 0 && team.defense > 0, 'ataque e defesa positivos');
 
