@@ -49,32 +49,25 @@
 
   // ---------- Draft ----------
 
-  // Monta a fila ordenada de posicoes a preencher: GK, DEFs, MIDs, FWDs.
-  function buildSlotQueue(counts) {
-    const queue = [];
-    POS_ORDER.forEach((pos) => {
-      for (let i = 0; i < (counts[pos] || 0); i++) queue.push(pos);
-    });
-    return queue;
-  }
-
   function newDraft(formationId) {
     const formation = getFormation(formationId);
     return {
       formation,
-      slotQueue: buildSlotQueue(formation.counts),
+      counts: formation.counts,
+      total: 11,
       picks: [],
       pickedKeys: new Set()
     };
   }
 
   function isDraftComplete(state) {
-    return state.picks.length >= state.slotQueue.length;
+    return state.picks.length >= state.total;
   }
 
-  // Posicao que a rodada atual deve preencher.
-  function currentTargetPos(state) {
-    return state.slotQueue[state.picks.length];
+  // Posicoes ainda em aberto (que nao atingiram o limite da formacao).
+  function openPositions(state) {
+    const filled = filledByPos(state);
+    return POS_ORDER.filter((pos) => filled[pos] < (state.counts[pos] || 0));
   }
 
   // Quantos jogadores de cada posicao ja foram escolhidos.
@@ -88,26 +81,30 @@
     return squad.club + '|' + squad.year + '|' + player.name;
   }
 
-  function availableInSquad(state, squad, pos) {
-    return squad.players.filter((p) => p.pos === pos && !state.pickedKeys.has(playerKey(squad, p)));
+  // Jogadores de um elenco que servem ao time: posicao ainda em aberto na
+  // formacao e que ainda nao foram escolhidos.
+  function usableFromSquad(state, squad, open) {
+    return squad.players.filter(
+      (p) => open.indexOf(p.pos) !== -1 && !state.pickedKeys.has(playerKey(squad, p))
+    );
   }
 
-  // Sorteia um elenco que possua jogador(es) da posicao-alvo ainda nao
-  // escolhidos. Prefere elencos com 2+ opcoes para a escolha valer a pena.
+  // Sorteia um elenco com pelo menos um jogador util (de posicao em aberto).
+  // Prefere elencos com 2+ opcoes para a escolha valer a pena.
   function drawTeamForDraft(state) {
-    const pos = currentTargetPos(state);
-    const usable = data.SQUADS.filter((sq) => availableInSquad(state, sq, pos).length >= 1);
-    const rich = usable.filter((sq) => availableInSquad(state, sq, pos).length >= 2);
+    const open = openPositions(state);
+    const usable = data.SQUADS.filter((sq) => usableFromSquad(state, sq, open).length >= 1);
+    const rich = usable.filter((sq) => usableFromSquad(state, sq, open).length >= 2);
     const pool = rich.length ? rich : usable;
     const squad = pick(pool.length ? pool : data.SQUADS);
-    const selectable = availableInSquad(state, squad, pos);
-    return { squad, selectable, targetPos: pos };
+    const selectable = usableFromSquad(state, squad, open);
+    return { squad, selectable, open };
   }
 
   function pickPlayer(state, squad, player) {
-    const expected = currentTargetPos(state);
-    if (player.pos !== expected) {
-      throw new Error('Posicao incorreta: esperado ' + expected + ', recebido ' + player.pos);
+    const filled = filledByPos(state);
+    if (filled[player.pos] >= (state.counts[player.pos] || 0)) {
+      throw new Error('Posicao ja preenchida: ' + player.pos);
     }
     const entry = {
       name: player.name,
@@ -169,21 +166,29 @@
   // ---------- Simulacao de partida ----------
 
   const GOAL_LINES = [
-    'GOOOOL! {p} aparece na area e estufa a rede!',
-    'Que golaco! {p} acerta um chute indefensavel!',
-    'No contra-ataque, {p} so teve o trabalho de empurrar pra dentro!',
-    'De cabeca! {p} sobe mais que a defesa e marca!',
-    'Pintura! {p} cobra a falta no angulo!',
-    'Pressao premiada! {p} balanca as redes!'
+    'GOOOOL! {p} apareceu na hora certa e mandou pra rede. Que golaco!',
+    'Na medida! {p} subiu mais que a zaga e cabeceou no canto. 1, 2, 3... e o gol!',
+    '{p} recebeu na entrada da area, limpou o marcador e bateu colocado. Um golaco!',
+    'Pegou de primeira! {p} acertou um chute sem chance pro goleiro.',
+    'No contra-ataque mortal, {p} saiu cara a cara e nao desperdicou.',
+    'Tava guardado! {p} bateu a falta com efeito e a bola morreu no angulo.',
+    'O time tocou, tocou e {p} apareceu livre pra empurrar pra rede.',
+    '{p} pescou o rebote dentro da area e nao perdoou. A torcida explode!',
+    'Dominou no peito e bateu de primeira: {p} faz um golaco e cala o adversario.',
+    'Na saida do goleiro, {p} tocou com categoria e a rede balancou.',
+    'Que jogada individual! {p} driblou a defesa inteira antes de marcar.',
+    'De penalti, com a frieza dos grandes, {p} desloca o goleiro e marca.'
   ];
 
   const FLAVOR_LINES = [
-    'Chega com perigo, mas a zaga afasta.',
-    'Bola na trave! Quase o gol saiu.',
-    'O goleiro faz uma defesaca!',
-    'Jogada trabalhada pelo meio-campo.',
-    'Falta perigosa na entrada da area.',
-    'Escanteio cobrado, a defesa corta.'
+    'Chega com perigo, mas a zaga afasta de cabeca.',
+    'Na trave! Faltou pouco pro gol sair.',
+    'Defesaca do goleiro, que evita o gol no susto.',
+    'Jogada bem trabalhada no meio-campo, mas sem finalizacao.',
+    'Falta perigosa na entrada da area, atencao na barreira.',
+    'Escanteio cobrado na area e a defesa corta firme.',
+    'Quase! O chute passou raspando a trave.',
+    'Cartao amarelo para a entrada dura no meio.'
   ];
 
   function scorerFrom(team) {
@@ -340,7 +345,7 @@
     getFormation,
     newDraft,
     isDraftComplete,
-    currentTargetPos,
+    openPositions,
     filledByPos,
     drawTeamForDraft,
     pickPlayer,

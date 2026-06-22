@@ -14,16 +14,16 @@ function assert(cond, msg) {
   else { console.log('  ok: ' + msg); }
 }
 
-// 1) Para CADA formacao: o draft preenche exatamente a contagem de cada posicao,
-//    e cada rodada so oferece jogadores da posicao-alvo.
+// 1) Para CADA formacao: o draft oferece apenas posicoes em aberto e, ao final,
+//    preenche exatamente a contagem de cada posicao da tatica.
 E.FORMATIONS.forEach((formation) => {
   const d = E.newDraft(formation.id);
   let guard = 0;
   while (!E.isDraftComplete(d) && guard++ < 100) {
-    const target = E.currentTargetPos(d);
+    const open = E.openPositions(d);
     const { squad, selectable } = E.drawTeamForDraft(d);
-    const allMatch = selectable.length > 0 && selectable.every((p) => p.pos === target);
-    assert(allMatch, formation.id + ': rodada oferece apenas ' + target);
+    const allOpen = selectable.length > 0 && selectable.every((p) => open.indexOf(p.pos) !== -1);
+    assert(allOpen, formation.id + ': so oferece posicoes em aberto (' + open.join(',') + ')');
     E.pickPlayer(d, squad, selectable[0]);
   }
   const filled = E.filledByPos(d);
@@ -32,13 +32,19 @@ E.FORMATIONS.forEach((formation) => {
   assert(ok, formation.id + ': contagem por posicao bate com a tatica');
 });
 
-// 1b) Nao e possivel escolher posicao errada (ex.: 11 atacantes).
-const dGuard = E.newDraft('4-3-3'); // primeira posicao da fila e GK
+// 1b) Nao e possivel exceder o limite de uma posicao (ex.: 11 atacantes).
+//     Em 4-3-3 ha 3 vagas de ATA; a 4a tentativa deve ser rejeitada.
+const dGuard = E.newDraft('4-3-3');
+const fakeSquad = { club: 'X', year: 1, players: [
+  { name: 'A', pos: 'FWD', rating: 80 }, { name: 'B', pos: 'FWD', rating: 80 },
+  { name: 'C', pos: 'FWD', rating: 80 }, { name: 'D', pos: 'FWD', rating: 80 }
+] };
 let threw = false;
 try {
-  E.pickPlayer(dGuard, { club: 'X', year: 1, players: [] }, { name: 'Fake', pos: 'FWD', rating: 80 });
+  fakeSquad.players.forEach((p) => E.pickPlayer(dGuard, fakeSquad, p)); // 4o estoura o limite
 } catch (e) { threw = true; }
-assert(threw, 'rejeita jogador de posicao diferente da exigida pela tatica');
+assert(threw, 'rejeita preencher mais que o limite da posicao na formacao');
+assert(E.filledByPos(dGuard).FWD === 3, 'parou exatamente em 3 atacantes (4-3-3)');
 
 // 2) Time montado tem ratings coerentes.
 const draft = E.newDraft('4-3-3');

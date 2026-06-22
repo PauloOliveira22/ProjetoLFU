@@ -3,13 +3,14 @@
 Jogo mobile de futebol com tema do **Brasileirão**. A proposta é simples e
 viciante, no espírito dos joguinhos virais de Copa:
 
-1. **Formação** — você escolhe a tática do time (**4-3-3, 4-4-2, 3-5-2,
-   4-2-3-1 ou 5-3-2**), que define quais posições serão preenchidas.
-2. **Draft** — o jogo sorteia um **elenco histórico** de um clube brasileiro
-   (ex.: *Santos 1962*, *Flamengo 1981*, *Palmeiras 2022*) e pede uma
-   **posição específica** da sua tática.
-3. Você **escolhe 1 jogador daquela posição** para a sua escalação.
-4. Repete até preencher **todas as posições** da tática (11 titulares).
+1. **Clube** — você escolhe um clube brasileiro para **representar**. Cada
+   título conquistado conta no **ranking global de títulos por time**.
+2. **Formação** — escolha a tática do time (**4-3-3, 4-4-2, 3-5-2,
+   4-2-3-1 ou 5-3-2**), que define quantos jogadores de cada posição você terá.
+3. **Draft** — o jogo sorteia um **elenco histórico** de um clube brasileiro
+   (ex.: *Santos 1962*, *Flamengo 1981*, *Palmeiras 2022*) e você escolhe
+   **qualquer jogador** de uma posição ainda em aberto.
+4. Repete até completar os **11 titulares**.
 5. Com o time pronto, você disputa uma **temporada** com partidas
    **simuladas**: placar dinâmico ao vivo + narração em texto.
 5. Termine no topo da **tabela** e seja **campeão**.
@@ -63,6 +64,36 @@ npx cap open android
 No Android Studio: **Build > Build Bundle(s) / APK(s) > Build APK(s)**.
 Para sempre que alterar o jogo, basta `npx cap sync` de novo.
 
+## 👤 Contas, estatísticas e ranking (Supabase)
+
+O jogo tem um sistema de contas com **fallback automático**:
+
+- **Sem configurar nada** → *modo local*: estatísticas (títulos, vitórias,
+  gols...) e ranking de títulos por time ficam salvos **neste aparelho**.
+- **Com Supabase configurado** → *modo nuvem*: login real (e-mail/senha),
+  estatísticas na sua conta e **ranking global** de títulos por time entre
+  todos os jogadores.
+
+### Como ativar a nuvem
+
+1. Crie um projeto gratuito em **[supabase.com](https://supabase.com)**.
+2. No painel: **SQL Editor → New query**, cole todo o conteúdo de
+   [`supabase/schema.sql`](supabase/schema.sql) e clique em **Run**
+   (cria as tabelas, as policies de segurança e a função de ranking).
+3. Em **Project Settings → API**, copie a **Project URL** e a **anon key**.
+4. Cole as duas em [`www/js/config.js`](www/js/config.js):
+   ```js
+   global.LFU.config = {
+     SUPABASE_URL: 'https://xxxx.supabase.co',
+     SUPABASE_ANON_KEY: 'eyJ...'
+   };
+   ```
+5. Pronto. A `anon key` é **pública** e segura no cliente — a segurança vem
+   das policies de **Row Level Security** já incluídas no schema.
+
+> Sem internet (ou se o Supabase não carregar), o jogo cai sozinho para o
+> modo local.
+
 ## 🗂️ Estrutura
 
 ```
@@ -73,9 +104,13 @@ ProjetoLFU/
 │   ├── index.html
 │   ├── css/styles.css
 │   └── js/
-│       ├── data.js           # elencos históricos + clubes adversários
+│       ├── config.js         # chaves do Supabase (vazio = modo local)
+│       ├── data.js           # elencos históricos + clubes
 │       ├── engine.js         # draft, simulação de partida e temporada
+│       ├── store.js          # contas, estatísticas e ranking (nuvem/local)
 │       └── ui.js             # telas e narração ao vivo
+├── supabase/
+│   └── schema.sql            # tabelas, RLS e função de ranking (rodar no Supabase)
 └── tools/
     ├── serve.js              # servidor estático de desenvolvimento
     └── test-engine.js        # testes da lógica
