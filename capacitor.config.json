@@ -1,0 +1,8 @@
+{
+  "appId": "br.com.projetolfu.brasileiraodraft",
+  "appName": "Brasileirao Draft",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

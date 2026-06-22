@@ -1,0 +1,29 @@
+{
+  "name": "brasileirao-draft",
+  "version": "0.1.0",
+  "description": "Jogo mobile de futebol com tema Brasileirao: monte seu time num draft de craques historicos e dispute a temporada com partidas simuladas (placar dinamico + narracao em texto).",
+  "private": true,
+  "scripts": {
+    "start": "node tools/serve.js",
+    "test": "node tools/test-engine.js",
+    "cap:add:android": "cap add android",
+    "cap:sync": "cap sync",
+    "cap:open:android": "cap open android"
+  },
+  "keywords": [
+    "futebol",
+    "brasileirao",
+    "game",
+    "android",
+    "capacitor"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
+  }
+}
